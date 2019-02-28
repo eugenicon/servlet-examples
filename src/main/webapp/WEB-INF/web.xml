@@ -6,34 +6,14 @@
 
     <display-name>Simple Servlet Application</display-name>
     <servlet>
-        <servlet-name>simpleServlet</servlet-name>
-        <servlet-class>net.example.servlet.SimpleServlet</servlet-class>
-        <load-on-startup>1</load-on-startup>
-    </servlet>
-
-    <servlet>
-        <servlet-name>registrationServlet</servlet-name>
-        <servlet-class>net.example.servlet.RegistrationServlet</servlet-class>
-        <load-on-startup>1</load-on-startup>
-    </servlet>
-
-    <servlet>
-        <servlet-name>anotherRegistrationServlet</servlet-name>
-        <servlet-class>net.example.servlet.AnotherRegistrationServlet</servlet-class>
+        <servlet-name>dispatcherServlet</servlet-name>
+        <servlet-class>net.example.servlet.DispatcherServlet</servlet-class>
         <load-on-startup>1</load-on-startup>
     </servlet>
 
     <servlet-mapping>
-        <servlet-name>simpleServlet</servlet-name>
-        <url-pattern>/welcome</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>registrationServlet</servlet-name>
-        <url-pattern>/register</url-pattern>
+        <servlet-name>dispatcherServlet</servlet-name>
+        <url-pattern>/view/*</url-pattern>
     </servlet-mapping>
 
-    <servlet-mapping>
-        <servlet-name>anotherRegistrationServlet</servlet-name>
-        <url-pattern>/another-register</url-pattern>
-    </servlet-mapping>
 </web-app>

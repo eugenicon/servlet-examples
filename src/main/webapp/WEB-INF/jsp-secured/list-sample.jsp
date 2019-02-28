@@ -16,12 +16,14 @@
     <% List<User> users = (List<User>) request.getAttribute("listOfData");
         for (User user : users) { %>
 
-    <tr>
-        <td>
-            <%=String.format("%s of age %s", user.getName(), user.getAge())%>
-        </td>
-    </tr>
-    <%} %>
+            <tr>
+                <td>
+                    <%=String.format("%s of age %s", user.getName(), user.getAge())%>
+                </td>
+            </tr>
+
+        <%} %>
 </table>
+<a href="add-user">Add</a>
 </body>
 </html>
