@@ -7,7 +7,7 @@ import net.example.view.View;
 public class WelcomeController {
 
     public View doWelcome() {
-        return new ModelAndView("index.html");
+        return new ModelAndView("WEB-INF/html/welcome.html");
     }
 
     public View doWelcomeRedirect() {

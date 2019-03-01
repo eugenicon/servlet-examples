@@ -17,7 +17,7 @@ public class UserController {
     }
 
     public ModelAndView getUserList() {
-        ModelAndView view = new ModelAndView("WEB-INF/jsp-secured/list-sample.jsp");
+        ModelAndView view = new ModelAndView("WEB-INF/jsp/list-sample.jsp");
         view.addParameter("currentDateFromBackend", new Date());
         view.addParameter("listOfData", userService.getAllUsers());
         return view;
@@ -25,16 +25,16 @@ public class UserController {
 
     public View getUserListBootstrap() {
         ModelAndView view = getUserList();
-        view.setPageUrl("WEB-INF/jsp-secured/bootstrap-list-sample.jsp");
+        view.setPageUrl("WEB-INF/jsp/bootstrap-list-sample.jsp");
         return view;
     }
 
     public View showAddUserPage() {
-        return new ModelAndView("WEB-INF/jsp-secured/add-user.jsp");
+        return new ModelAndView("WEB-INF/jsp/add-user.jsp");
     }
 
-    public View showAddUserPageBootsrtap() {
-        return new ModelAndView("WEB-INF/jsp-secured/add-user-bootstrap.jsp");
+    public View showAddUserPageBootstrap() {
+        return new ModelAndView("WEB-INF/jsp/add-user-bootstrap.jsp");
     }
 
     public View addUser(User user) {
@@ -44,7 +44,7 @@ public class UserController {
             view = new ModelAndView("user-list");
         } catch (ServiceException e) {
             view = new ModelAndView("add-user");
-            view.addParameter("error", e.getMessage());
+            view.addParameter("error", e.getCause().getMessage());
         }
         return new RedirectView(view);
     }

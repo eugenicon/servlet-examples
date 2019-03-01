@@ -34,7 +34,7 @@ public class DispatcherServlet extends HttpServlet {
         getControllers.put("/user-list", r -> userController.getUserList());
         getControllers.put("/add-user", r -> userController.showAddUserPage());
         getControllers.put("/user-list-bootstrap", r -> userController.getUserListBootstrap());
-        getControllers.put("/add-user-bootstrap", r -> userController.showAddUserPageBootsrtap());
+        getControllers.put("/add-user-bootstrap", r -> userController.showAddUserPageBootstrap());
 
         UserTransformer userTransformer = new UserTransformer();
 
@@ -52,12 +52,10 @@ public class DispatcherServlet extends HttpServlet {
     }
 
     private void dispatch(View view, HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-        if (view == null) {
-            // do nothing
-        } else if (view instanceof RedirectView) {
+        if (view instanceof RedirectView) {
             request.getSession().setAttribute(VIEW_ATTRIBUTE, view.getView());
             response.sendRedirect(view.getPageUrl());
-        } else {
+        } else if (view != null){
             view.getParams().forEach(request::setAttribute);
             RequestDispatcher requestDispatcher = request.getRequestDispatcher("/" + view.getPageUrl());
             requestDispatcher.forward(request, response);
