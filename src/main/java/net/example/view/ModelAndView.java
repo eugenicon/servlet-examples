@@ -3,8 +3,11 @@ package net.example.view;
 import java.util.*;
 
 public class ModelAndView implements View {
-    private final String pageUrl;
+    private String pageUrl;
     private Map<String, Object> params = new HashMap<>();
+
+    public ModelAndView() {
+    }
 
     public ModelAndView(String pageUrl) {
         this.pageUrl = pageUrl;
@@ -13,6 +16,10 @@ public class ModelAndView implements View {
     @Override
     public String getPageUrl() {
         return pageUrl;
+    }
+
+    public void setPageUrl(String pageUrl) {
+        this.pageUrl = pageUrl;
     }
 
     @Override

@@ -33,6 +33,8 @@ public class DispatcherServlet extends HttpServlet {
         getControllers.put("/welcome", r -> controller.doWelcome());
         getControllers.put("/user-list", r -> userController.getUserList());
         getControllers.put("/add-user", r -> userController.showAddUserPage());
+        getControllers.put("/user-list-bootstrap", r -> userController.getUserListBootstrap());
+        getControllers.put("/add-user-bootstrap", r -> userController.showAddUserPageBootsrtap());
 
         UserTransformer userTransformer = new UserTransformer();
 

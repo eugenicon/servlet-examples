@@ -16,15 +16,25 @@ public class UserController {
         this.userService = userService;
     }
 
-    public View getUserList() {
+    public ModelAndView getUserList() {
         ModelAndView view = new ModelAndView("WEB-INF/jsp-secured/list-sample.jsp");
         view.addParameter("currentDateFromBackend", new Date());
         view.addParameter("listOfData", userService.getAllUsers());
         return view;
     }
 
+    public View getUserListBootstrap() {
+        ModelAndView view = getUserList();
+        view.setPageUrl("WEB-INF/jsp-secured/bootstrap-list-sample.jsp");
+        return view;
+    }
+
     public View showAddUserPage() {
         return new ModelAndView("WEB-INF/jsp-secured/add-user.jsp");
+    }
+
+    public View showAddUserPageBootsrtap() {
+        return new ModelAndView("WEB-INF/jsp-secured/add-user-bootstrap.jsp");
     }
 
     public View addUser(User user) {
