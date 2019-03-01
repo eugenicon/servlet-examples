@@ -44,7 +44,7 @@ public class UserController {
             view = new ModelAndView("user-list");
         } catch (ServiceException e) {
             view = new ModelAndView("add-user");
-            view.addParameter("error", e.getCause().getMessage());
+            view.addParameter("error", e.getCause() == null ? e.getMessage() : e.getCause().getMessage());
         }
         return new RedirectView(view);
     }
