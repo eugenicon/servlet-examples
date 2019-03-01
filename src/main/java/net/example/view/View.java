@@ -10,4 +10,8 @@ public interface View {
     void removeParameter(String key);
 
     Map<String, Object> getParams();
+
+    default View getView() {
+        return this;
+    }
 }

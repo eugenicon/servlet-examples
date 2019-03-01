@@ -17,23 +17,23 @@ public class UserController {
     }
 
     public View getUserList() {
-        ModelAndView view = new ModelAndView("/WEB-INF/jsp-secured/list-sample.jsp");
+        ModelAndView view = new ModelAndView("WEB-INF/jsp-secured/list-sample.jsp");
         view.addParameter("currentDateFromBackend", new Date());
         view.addParameter("listOfData", userService.getAllUsers());
         return view;
     }
 
     public View showAddUserPage() {
-        return new ModelAndView("/WEB-INF/jsp-secured/add-user.jsp");
+        return new ModelAndView("WEB-INF/jsp-secured/add-user.jsp");
     }
 
     public View addUser(User user) {
         View view;
         try {
             userService.addUser(user);
-            view = new ModelAndView("/user-list");
+            view = new ModelAndView("user-list");
         } catch (ServiceException e) {
-            view = new ModelAndView("/add-user");
+            view = new ModelAndView("add-user");
             view.addParameter("error", e.getMessage());
         }
         return new RedirectView(view);

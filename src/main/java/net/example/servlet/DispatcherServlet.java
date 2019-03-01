@@ -15,10 +15,11 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 import java.util.function.Function;
 
 public class DispatcherServlet extends HttpServlet {
-    private static final long serialVersionUID = -1641096228274971485L;
+    private static final String VIEW_ATTRIBUTE = "VIEW_ATTRIBUTE";
 
     private Map<String, Function<HttpServletRequest, View>> getControllers = new HashMap<>();
     private Map<String, Function<HttpServletRequest, View>> postControllers = new HashMap<>();
@@ -28,7 +29,7 @@ public class DispatcherServlet extends HttpServlet {
         WelcomeController controller = new WelcomeController();
         UserController userController = new UserController(new UserService());
 
-        getControllers.put("/", r -> controller.doWelcome());
+        getControllers.put("/", r -> controller.doWelcomeRedirect());
         getControllers.put("/welcome", r -> controller.doWelcome());
         getControllers.put("/user-list", r -> userController.getUserList());
         getControllers.put("/add-user", r -> userController.showAddUserPage());
@@ -39,24 +40,24 @@ public class DispatcherServlet extends HttpServlet {
     }
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-
-        View view = getView(request, getControllers);
-        if (view != null) {
-            RequestDispatcher requestDispatcher = request.getRequestDispatcher(view.getPageUrl());
-            requestDispatcher.forward(request, response);
-        }
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        dispatch(getView(request, getControllers), request, response);
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        View view = getView(request, postControllers);
-        if (view != null) {
-            if (view instanceof RedirectView) {
-                view = getView(view.getPageUrl(), request, getControllers);
-            }
-            RequestDispatcher requestDispatcher = request.getRequestDispatcher(view.getPageUrl());
+        dispatch(getView(request, postControllers), request, response);
+    }
+
+    private void dispatch(View view, HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+        if (view == null) {
+            // do nothing
+        } else if (view instanceof RedirectView) {
+            request.getSession().setAttribute(VIEW_ATTRIBUTE, view.getView());
+            response.sendRedirect(view.getPageUrl());
+        } else {
+            view.getParams().forEach(request::setAttribute);
+            RequestDispatcher requestDispatcher = request.getRequestDispatcher("/" + view.getPageUrl());
             requestDispatcher.forward(request, response);
         }
     }
@@ -67,14 +68,14 @@ public class DispatcherServlet extends HttpServlet {
     }
 
     private View getView(String key, HttpServletRequest request, Map<String, Function<HttpServletRequest, View>> controllerSource) {
-        Function<HttpServletRequest, View> viewFunction = controllerSource.get(key);
+        View originView = (View) request.getSession().getAttribute(VIEW_ATTRIBUTE);
+        request.getSession().removeAttribute(VIEW_ATTRIBUTE);
 
-        View view = null;
-        if (viewFunction != null) {
-            view = viewFunction.apply(request);
-            view.getParams().forEach(request::setAttribute);
+        View destinationView = Optional.ofNullable(controllerSource.get(key)).map(f -> f.apply(request)).orElse(null);
+        if (originView != null && destinationView != null) {
+            originView.getParams().forEach(destinationView::addParameter);
         }
-        return view;
+        return destinationView;
     }
 
     @Override

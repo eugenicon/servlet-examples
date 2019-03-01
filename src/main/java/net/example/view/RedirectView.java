@@ -28,4 +28,9 @@ public class RedirectView implements View {
     public Map<String, Object> getParams() {
         return view.getParams();
     }
+
+    @Override
+    public View getView() {
+        return view;
+    }
 }
