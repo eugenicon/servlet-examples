@@ -1,6 +1,6 @@
 package net.example.service;
 
-import net.example.data.User;
+import net.example.data.model.User;
 
 import java.util.ArrayList;
 import java.util.List;

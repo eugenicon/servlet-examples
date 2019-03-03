@@ -1,6 +1,6 @@
 package net.example.controller;
 
-import net.example.data.User;
+import net.example.data.model.User;
 import net.example.service.ServiceException;
 import net.example.service.UserService;
 import net.example.view.ModelAndView;

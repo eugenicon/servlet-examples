@@ -1,4 +1,4 @@
-<%@ page import="net.example.data.User" %>
+<%@ page import="net.example.data.model.User" %>
 <%@ page import="java.util.List" %>
 <%@ page import="java.util.Date" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>

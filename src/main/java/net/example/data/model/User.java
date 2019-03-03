@@ -1,4 +1,4 @@
-package net.example.data;
+package net.example.data.model;
 
 public class User {
     private String name;

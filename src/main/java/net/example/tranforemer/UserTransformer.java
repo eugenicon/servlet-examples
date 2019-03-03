@@ -1,6 +1,6 @@
 package net.example.tranforemer;
 
-import net.example.data.User;
+import net.example.data.model.User;
 
 import javax.servlet.http.HttpServletRequest;
 
