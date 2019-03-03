@@ -1,7 +1,12 @@
 package net.example.servlet;
 
+import net.example.controller.GroupController;
 import net.example.controller.UserController;
 import net.example.controller.WelcomeController;
+import net.example.data.dao.DataSource;
+import net.example.data.dao.GroupDao;
+import net.example.data.dao.UserDao;
+import net.example.service.GroupService;
 import net.example.service.UserService;
 import net.example.tranforemer.UserTransformer;
 import net.example.view.RedirectView;
@@ -26,8 +31,17 @@ public class DispatcherServlet extends HttpServlet {
 
     @Override
     public void init() throws ServletException {
+        DataSource dataSource = new DataSource();
+
+        GroupDao groupDao = new GroupDao(dataSource);
+        UserDao userDao = new UserDao(dataSource, groupDao);
+
+        UserService userService = new UserService(userDao);
+        GroupService groupService = new GroupService(groupDao);
+
         WelcomeController controller = new WelcomeController();
-        UserController userController = new UserController(new UserService());
+        UserController userController = new UserController(userService);
+        GroupController groupController = new GroupController(groupService);
 
         getControllers.put("/", r -> controller.doWelcomeRedirect());
         getControllers.put("/welcome", r -> controller.doWelcome());
@@ -35,6 +49,7 @@ public class DispatcherServlet extends HttpServlet {
         getControllers.put("/add-user", r -> userController.showAddUserPage());
         getControllers.put("/user-list-bootstrap", r -> userController.getUserListBootstrap());
         getControllers.put("/add-user-bootstrap", r -> userController.showAddUserPageBootstrap());
+        getControllers.put("/group-list", r -> groupController.getAll());
 
         UserTransformer userTransformer = new UserTransformer();
 
