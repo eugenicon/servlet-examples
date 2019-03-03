@@ -1,6 +1,7 @@
 package net.example.data.model;
 
 public class User {
+    private int id;
     private String name;
     private int age;
     private Group group;
@@ -36,5 +37,13 @@ public class User {
 
     public void setGroup(Group group) {
         this.group = group;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 }

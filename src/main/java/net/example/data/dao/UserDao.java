@@ -25,11 +25,11 @@ public class UserDao {
         return dataSource.selectQuery("select name, age, group_id from users", converter);
     }
 
-    public void save(User user) throws Exception {
-        if (user != null) {
-
-        }
-        throw new Exception("Could not save user");
+    public void save(User user) {
+        dataSource.executeUpdate("insert into users (name, age) values(?, ?)", ps -> {
+            ps.setString(1, user.getName());
+            ps.setInt(2, user.getAge());
+        }, rs -> user.setId(rs.getInt(1)));
     }
 
     public List<User> getUsersByGroup(Group group) {
