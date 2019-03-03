@@ -22,8 +22,8 @@
             <table class="table table-bordered">
                 <thead>
                 <tr>
-                    <th>User Name</th>
-                    <th>Age</th>
+                    <th>Id</th>
+                    <th>Name</th>
                 </tr>
                 </thead>
                 <% List<Group> groups = (List<Group>) request.getAttribute("listOfData");

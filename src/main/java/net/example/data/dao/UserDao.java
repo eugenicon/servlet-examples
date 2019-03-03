@@ -3,11 +3,6 @@ package net.example.data.dao;
 import net.example.data.model.Group;
 import net.example.data.model.User;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 
 public class UserDao {
@@ -20,25 +15,13 @@ public class UserDao {
     }
 
     public List<User> getAll() {
-        List<User> users = new ArrayList<>();
-        try (
-                Connection connection = dataSource.getConnection();
-                PreparedStatement ps = connection.prepareStatement("select name, age, group_id from users");
-                ResultSet rs = ps.executeQuery();
-                ) {
-
-            while (rs.next()) {
-                User user = new User();
-                user.setName(rs.getString("name"));
-                user.setAge(rs.getInt("age"));
-                user.setGroup(groupDao.getById(rs.getInt("group_id")));
-                users.add(user);
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-
-        return users;
+        return dataSource.executeQuery("select name, age, group_id from users", rs -> {
+            User user = new User();
+            user.setName(rs.getString("name"));
+            user.setAge(rs.getInt("age"));
+            user.setGroup(groupDao.getById(rs.getInt("group_id")));
+            return user;
+        });
     }
 
     public void save(User user) throws Exception {

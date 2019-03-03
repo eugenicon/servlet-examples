@@ -1,13 +1,11 @@
 package net.example.data.dao;
 
 import net.example.data.model.Group;
-import net.example.data.model.User;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 
 public class GroupDao {
@@ -18,24 +16,12 @@ public class GroupDao {
     }
 
     public List<Group> getAll() {
-        List<Group> groups = new ArrayList<>();
-        try (
-                Connection connection = dataSource.getConnection();
-                PreparedStatement ps = connection.prepareStatement("select * from groups");
-                ResultSet rs = ps.executeQuery();
-        ) {
-
-            while (rs.next()) {
-                Group user = new Group();
-                user.setName(rs.getString("name"));
-                user.setId(rs.getInt("id"));
-                groups.add(user);
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-
-        return groups;
+        return dataSource.executeQuery("select * from groups", rs -> {
+            Group group = new Group();
+            group.setName(rs.getString("name"));
+            group.setId(rs.getInt("id"));
+            return group;
+        });
     }
 
     public void save(Group group) {
