@@ -3,7 +3,9 @@ package net.example.data.dao;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Scanner;
+import java.util.function.Consumer;
 import java.util.function.Function;
 
 public class DataSource {
@@ -38,21 +40,32 @@ public class DataSource {
         return DriverManager.getConnection(url, userName, password);
     }
 
-    public <T> List<T> executeQuery(String sql, SqlFunction<T> function) {
+    public <T> List<T> selectQuery(String sql, SqlFunction<T> function) {
+        return selectQuery(sql, function, ps -> {});
+    }
+
+    public <T> List<T> selectQuery(String sql, SqlFunction<T> function, SqlParamSetter paramSetter) {
         List<T> list = new ArrayList<>();
         try (
                 Connection connection = getConnection();
                 PreparedStatement ps = connection.prepareStatement(sql);
-                ResultSet rs = ps.executeQuery();
+
         ) {
-            while (rs.next()) {
-                list.add(function.apply(rs));
+            paramSetter.accept(ps);
+            try (ResultSet rs = ps.executeQuery();) {
+                while (rs.next()) {
+                    list.add(function.apply(rs));
+                }
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
 
         return list;
+    }
+
+    public <T> Optional<T> selectFirst(String sql, SqlFunction<T> function, SqlParamSetter paramSetter) {
+        return selectQuery(sql, function, paramSetter).stream().findFirst();
     }
 
     interface SqlFunction<T> extends Function<ResultSet, T> {
@@ -66,5 +79,18 @@ public class DataSource {
         }
 
         T safeApply(ResultSet resultSet) throws SQLException;
+    }
+
+    interface SqlParamSetter extends Consumer<PreparedStatement> {
+        @Override
+        default void accept(PreparedStatement preparedStatement) {
+            try {
+                safeApply(preparedStatement);
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+        void safeApply(PreparedStatement preparedStatement) throws SQLException;
     }
 }

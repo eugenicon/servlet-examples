@@ -26,6 +26,7 @@
                 <tr>
                     <th>User Name</th>
                     <th>Age</th>
+                    <th>Group</th>
                 </tr>
                 </thead>
                 <% List<User> users = (List<User>) request.getAttribute("listOfData");
@@ -37,6 +38,9 @@
                     </td>
                     <td>
                         <%=user.getAge()%>
+                    </td>
+                    <td>
+                        <%=user.getGroup() == null ? "" : user.getGroup().getName()%>
                     </td>
                 </tr>
 
