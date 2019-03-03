@@ -40,7 +40,7 @@ public class DispatcherServlet extends HttpServlet {
         GroupService groupService = new GroupService(groupDao);
 
         WelcomeController controller = new WelcomeController();
-        UserController userController = new UserController(userService);
+        UserController userController = new UserController(userService, groupService);
         GroupController groupController = new GroupController(groupService);
 
         getControllers.put("/", r -> controller.doWelcomeRedirect());
@@ -51,7 +51,7 @@ public class DispatcherServlet extends HttpServlet {
         getControllers.put("/add-user-bootstrap", r -> userController.showAddUserPageBootstrap());
         getControllers.put("/group-list", r -> groupController.getAll());
 
-        UserTransformer userTransformer = new UserTransformer();
+        UserTransformer userTransformer = new UserTransformer(groupService);
 
         postControllers.put("/add-user", r -> userController.addUser(userTransformer.transform(r)));
     }

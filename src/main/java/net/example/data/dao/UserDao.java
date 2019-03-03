@@ -26,9 +26,10 @@ public class UserDao {
     }
 
     public void save(User user) {
-        dataSource.executeUpdate("insert into users (name, age) values(?, ?)", ps -> {
+        dataSource.executeUpdate("insert into users (name, age, group_id) values(?, ?, ?)", ps -> {
             ps.setString(1, user.getName());
             ps.setInt(2, user.getAge());
+            ps.setInt(3, user.getGroup() != null ? user.getGroup().getId() : 0);
         }, rs -> user.setId(rs.getInt(1)));
     }
 

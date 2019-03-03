@@ -1,6 +1,7 @@
 package net.example.controller;
 
 import net.example.data.model.User;
+import net.example.service.GroupService;
 import net.example.service.ServiceException;
 import net.example.service.UserService;
 import net.example.view.ModelAndView;
@@ -11,9 +12,11 @@ import java.util.Date;
 
 public class UserController {
     private final UserService userService;
+    private final GroupService groupService;
 
-    public UserController(UserService userService) {
+    public UserController(UserService userService, GroupService groupService) {
         this.userService = userService;
+        this.groupService = groupService;
     }
 
     public ModelAndView getUserList() {
@@ -34,7 +37,9 @@ public class UserController {
     }
 
     public View showAddUserPageBootstrap() {
-        return new ModelAndView("WEB-INF/jsp/add-user-bootstrap.jsp");
+        ModelAndView modelAndView = new ModelAndView("WEB-INF/jsp/add-user-bootstrap.jsp");
+        modelAndView.addParameter("groups", groupService.getAllGroups());
+        return modelAndView;
     }
 
     public View addUser(User user) {

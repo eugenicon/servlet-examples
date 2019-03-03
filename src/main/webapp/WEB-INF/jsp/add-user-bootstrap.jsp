@@ -1,3 +1,5 @@
+<%@ page import="java.util.List" %>
+<%@ page import="net.example.data.model.Group" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <html>
@@ -11,6 +13,7 @@
 </head>
 <body>
 <%
+    List<Group> groups = (List<Group>) request.getAttribute("groups");
     String error = (String) request.getAttribute("error");
     if (error != null) {
 %> <h1><%=error%>
@@ -29,6 +32,26 @@
                 <div class="form-group">
                     <label for="age">Age:</label>
                     <input type="number" class="form-control" id="age" name="age" placeholder="Enter Your Age">
+                </div>
+
+                <div class="col-auto my-1">
+                    <label class="mr-sm-2" for="group_id">Group</label>
+                    <select class="custom-select mr-sm-2" id="group_id" name="group_id">
+                        <option selected>Choose...</option>
+
+                        <%
+                            for (Group group : groups) {
+                        %>
+                        <option value="<%=group.getId()%>"><%=group.getName()%></option>
+                        <%
+                            }
+                        %>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="group">Comment:</label>
+                    <textarea class="form-control" rows="5" id="group"></textarea>
                 </div>
 
                 <div class="form-group">

@@ -15,4 +15,8 @@ public class GroupService {
     public List<Group> getAllGroups() {
         return groupDao.getAll();
     }
+
+    public Group getById(int id) {
+        return groupDao.getById(id);
+    }
 }
