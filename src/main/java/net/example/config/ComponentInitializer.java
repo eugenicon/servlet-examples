@@ -19,7 +19,7 @@ public class ComponentInitializer {
     private final GroupController groupController;
     private final RequestResolver requestResolver;
 
-    public ComponentInitializer() {
+    private ComponentInitializer() {
         DataSource dataSource = new DataSource();
 
         GroupDao groupDao = new GroupDao(dataSource);
