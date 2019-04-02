@@ -1,5 +1,6 @@
 package net.example.config;
 
+import net.example.controller.ErrorController;
 import net.example.controller.GroupController;
 import net.example.controller.UserController;
 import net.example.controller.WelcomeController;
@@ -18,6 +19,7 @@ public class ComponentInitializer {
     private final UserController userController;
     private final GroupController groupController;
     private final RequestResolver requestResolver;
+    private final ErrorController errorController;
 
     private ComponentInitializer() {
         DataSource dataSource = new DataSource();
@@ -31,10 +33,11 @@ public class ComponentInitializer {
         welcomeController = new WelcomeController();
         userController = new UserController(userService, groupService);
         groupController = new GroupController(groupService);
+        errorController = new ErrorController();
 
         UserTransformer userTransformer = new UserTransformer(groupService);
 
-        requestResolver = new RequestResolver(welcomeController, userController, groupController, userTransformer);
+        requestResolver = new RequestResolver(welcomeController, userController, groupController, errorController, userTransformer);
     }
 
     public static ComponentInitializer getInstance() {
