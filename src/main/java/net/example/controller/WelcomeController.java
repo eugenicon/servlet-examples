@@ -13,4 +13,8 @@ public class WelcomeController {
     public View doWelcomeRedirect() {
         return new RedirectView(new ModelAndView("welcome"));
     }
+
+    public View showTemplatePage() {
+        return new ModelAndView("WEB-INF/jsp/example.jsp");
+    }
 }

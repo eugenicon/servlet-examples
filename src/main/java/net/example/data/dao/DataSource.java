@@ -26,7 +26,11 @@ public class DataSource {
         password = "root";
         url = "jdbc:postgresql://localhost/postgres";
 
-        executeUpdate(initBdScript, ps -> {}, rs -> {});
+        try {
+            executeUpdate(initBdScript, ps -> {}, rs -> {});
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private Connection getConnection() throws SQLException {

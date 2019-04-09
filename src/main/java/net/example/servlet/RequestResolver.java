@@ -34,6 +34,7 @@ public class RequestResolver {
         getControllers.put("/group-list", r -> groupController.getAll());
         getControllers.put("/problem-page", r -> errorController.getViewWithSomeTestException());
         getControllers.put("/error", r -> errorController.getErrorPage((Exception) r.getAttribute("error")));
+        getControllers.put("/template-example", r -> welcomeController.showTemplatePage());
 
         postControllers.put("/add-user", r -> userController.addUser(userTransformer.transform(r)));
     }
