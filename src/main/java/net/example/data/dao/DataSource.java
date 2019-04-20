@@ -1,10 +1,12 @@
 package net.example.data.dao;
 
+import net.example.util.ResourceReader;
+
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.Scanner;
+import java.util.Properties;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
@@ -14,20 +16,22 @@ public class DataSource {
     private final String password;
     private final String url;
 
-    public DataSource() {
-        try {
-            Class.forName("org.postgresql.Driver");
+    public DataSource(Properties properties) {
+       try {
+            Class.forName(properties.getProperty("jdbc.driver"));
         } catch (ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
 
-        String initBdScript = new Scanner(getClass().getClassLoader().getResourceAsStream("sql/init_database.sql")).useDelimiter("\\A").next();
-        userName = "postgres";
-        password = "root";
-        url = "jdbc:postgresql://localhost/postgres";
+        url = properties.getProperty("jdbc.url");
+        userName = properties.getProperty("jdbc.user");
+        password = properties.getProperty("jdbc.password");
 
         try {
-            executeUpdate(initBdScript, ps -> {}, rs -> {});
+            String initBdScript = ResourceReader.getResourceAsString(properties.getProperty("jdbc.init-script"));
+            if (!initBdScript.isEmpty()) {
+                executeUpdate(initBdScript, ps -> {}, rs -> {});
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }

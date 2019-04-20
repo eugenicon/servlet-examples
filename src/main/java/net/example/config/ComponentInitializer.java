@@ -11,6 +11,9 @@ import net.example.service.GroupService;
 import net.example.service.UserService;
 import net.example.servlet.RequestResolver;
 import net.example.tranforemer.UserTransformer;
+import net.example.util.ResourceReader;
+
+import java.util.Properties;
 
 public class ComponentInitializer {
     private static ComponentInitializer instance;
@@ -22,7 +25,9 @@ public class ComponentInitializer {
     private final ErrorController errorController;
 
     private ComponentInitializer() {
-        DataSource dataSource = new DataSource();
+        Properties properties = ResourceReader.getResourceAsProperties("application.properties");
+
+        DataSource dataSource = new DataSource(properties);
 
         GroupDao groupDao = new GroupDao(dataSource);
         UserDao userDao = new UserDao(dataSource, groupDao);
