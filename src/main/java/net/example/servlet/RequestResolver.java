@@ -37,6 +37,7 @@ public class RequestResolver {
         getControllers.put("/template-example", r -> welcomeController.showTemplatePage());
 
         postControllers.put("/add-user", r -> userController.addUser(userTransformer.transform(r)));
+        postControllers.put("/error", getControllers.get("/error"));
     }
 
     public void resolveGetRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

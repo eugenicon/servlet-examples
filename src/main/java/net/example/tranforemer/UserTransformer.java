@@ -18,9 +18,13 @@ public class UserTransformer implements Transformer<User> {
         User user = new User();
         user.setAge(Integer.parseInt(request.getParameter("age")));
         user.setName(request.getParameter("name"));
-        int groupId = Integer.parseInt(request.getParameter("group_id"));
-        Group group = groupService.getById(groupId);
-        user.setGroup(group);
+        try {
+            int groupId = Integer.parseInt(request.getParameter("group_id"));
+            Group group = groupService.getById(groupId);
+            user.setGroup(group);
+        } catch (Exception e) {
+            // do nothing
+        }
         return user;
     }
 }

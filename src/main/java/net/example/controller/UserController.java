@@ -1,6 +1,7 @@
 package net.example.controller;
 
 import net.example.data.model.User;
+import net.example.data.validation.ValidationService;
 import net.example.service.GroupService;
 import net.example.service.ServiceException;
 import net.example.service.UserService;
@@ -9,14 +10,17 @@ import net.example.view.RedirectView;
 import net.example.view.View;
 
 import java.util.Date;
+import java.util.List;
 
 public class UserController {
     private final UserService userService;
     private final GroupService groupService;
+    private ValidationService validationService;
 
-    public UserController(UserService userService, GroupService groupService) {
+    public UserController(UserService userService, GroupService groupService, ValidationService validationService) {
         this.userService = userService;
         this.groupService = groupService;
+        this.validationService = validationService;
     }
 
     public ModelAndView getUserList() {
@@ -44,13 +48,23 @@ public class UserController {
 
     public View addUser(User user) {
         View view;
-        try {
-            userService.addUser(user);
-            view = new ModelAndView("user-list");
-        } catch (ServiceException e) {
-            view = new ModelAndView("add-user");
-            view.addParameter("error", e.getCause() == null ? e.getMessage() : e.getCause().getMessage());
+        List<String> validationErrors = validationService.validate(user);
+        if (validationErrors.isEmpty()) {
+            try {
+                userService.addUser(user);
+                view = new ModelAndView("user-list");
+            } catch (ServiceException e) {
+                view = showUserAddErrors(e.getCause() == null ? e.getMessage() : e.getCause().getMessage());
+            }
+        } else {
+            view = showUserAddErrors(String.join("\n", validationErrors));
         }
         return new RedirectView(view);
+    }
+
+    private View showUserAddErrors(String error) {
+        View view = new ModelAndView("add-user-bootstrap");
+        view.addParameter("error", error);
+        return view;
     }
 }

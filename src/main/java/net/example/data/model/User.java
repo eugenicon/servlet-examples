@@ -1,5 +1,9 @@
 package net.example.data.model;
 
+import net.example.data.validation.NotEmpty;
+import net.example.data.validation.ValidNumber;
+import net.example.data.validation.ValidRegex;
+
 public class User {
     private int id;
     private String name;
@@ -15,6 +19,7 @@ public class User {
         this.age = age;
     }
 
+    @ValidRegex(regex = ".{4,}", message = "valid-name-length")
     public String getName() {
         return name;
     }
@@ -23,6 +28,7 @@ public class User {
         this.name = name;
     }
 
+    @ValidNumber(min = 5, max = 90, message = "valid-age")
     public int getAge() {
         return age;
     }
@@ -31,6 +37,7 @@ public class User {
         this.age = age;
     }
 
+    @NotEmpty("valid-group")
     public Group getGroup() {
         return group;
     }

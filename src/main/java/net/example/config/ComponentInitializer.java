@@ -7,6 +7,10 @@ import net.example.controller.WelcomeController;
 import net.example.data.dao.DataSource;
 import net.example.data.dao.GroupDao;
 import net.example.data.dao.UserDao;
+import net.example.data.validation.NotEmpty;
+import net.example.data.validation.ValidNumber;
+import net.example.data.validation.ValidRegex;
+import net.example.data.validation.ValidationService;
 import net.example.service.GroupService;
 import net.example.service.UserService;
 import net.example.servlet.RequestResolver;
@@ -35,8 +39,14 @@ public class ComponentInitializer {
         UserService userService = new UserService(userDao);
         GroupService groupService = new GroupService(groupDao);
 
+        ValidationService validationService = new ValidationService(
+                new ValidRegex.AnnotationProcessor(),
+                new NotEmpty.AnnotationProcessor(),
+                new ValidNumber.AnnotationProcessor()
+        );
+
         welcomeController = new WelcomeController();
-        userController = new UserController(userService, groupService);
+        userController = new UserController(userService, groupService, validationService);
         groupController = new GroupController(groupService);
         errorController = new ErrorController();
 

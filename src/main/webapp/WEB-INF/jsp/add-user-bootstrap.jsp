@@ -16,7 +16,7 @@
     List<Group> groups = (List<Group>) request.getAttribute("groups");
     String error = (String) request.getAttribute("error");
     if (error != null) {
-%> <h1><%=error%>
+%> <h1 style="white-space: pre;"><%=error%>
 </h1> <%
     }
 %>
