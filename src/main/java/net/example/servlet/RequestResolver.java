@@ -7,6 +7,8 @@ import net.example.controller.WelcomeController;
 import net.example.tranforemer.UserTransformer;
 import net.example.view.RedirectView;
 import net.example.view.View;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -19,6 +21,8 @@ import java.util.Optional;
 import java.util.function.Function;
 
 public class RequestResolver {
+    private static final Logger LOGGER = LogManager.getLogger(RequestResolver.class);
+
     private static final String VIEW_ATTRIBUTE = "VIEW_ATTRIBUTE";
 
     private Map<String, Function<HttpServletRequest, View>> getControllers = new HashMap<>();
@@ -49,6 +53,7 @@ public class RequestResolver {
     }
 
     private void dispatch(HttpServletRequest request, HttpServletResponse response, Map<String, Function<HttpServletRequest, View>> getControllers) throws IOException, ServletException {
+        LOGGER.info("dispatching request {}", request.getRequestURI());
         try {
             dispatch(getView(request, getControllers), request, response);
         } catch (Exception e) {

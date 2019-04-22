@@ -16,10 +16,13 @@ import net.example.service.UserService;
 import net.example.servlet.RequestResolver;
 import net.example.tranforemer.UserTransformer;
 import net.example.util.ResourceReader;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.Properties;
 
 public class ComponentInitializer {
+    private static final Logger LOGGER = LogManager.getLogger(ComponentInitializer.class);
     private static ComponentInitializer instance;
 
     private final WelcomeController welcomeController;
@@ -29,6 +32,7 @@ public class ComponentInitializer {
     private final ErrorController errorController;
 
     private ComponentInitializer() {
+        LOGGER.debug("ComponentInitializer created");
         Properties properties = ResourceReader.getResourceAsProperties("application.properties");
 
         DataSource dataSource = new DataSource(properties);
