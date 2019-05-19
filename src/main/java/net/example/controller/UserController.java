@@ -58,18 +58,19 @@ public class UserController {
     }
 
     @ExceptionMapping(ServiceException.class)
-    public View showUserAddErrors(ServiceException e) {
-        return showUserAddErrors(e.getCause() == null ? e.getMessage() : e.getCause().getMessage());
+    public View showUserAddErrors(ServiceException e, User user) {
+        return showUserAddErrors(e.getCause() == null ? e.getMessage() : e.getCause().getMessage(), user);
     }
 
     @ExceptionMapping(ValidationException.class)
-    public View showUserAddErrors(ValidationException e) {
-        return showUserAddErrors(String.join("\n", e.getErrors()));
+    public View showUserAddErrors(ValidationException e, User user) {
+        return showUserAddErrors(String.join("\n", e.getErrors()), user);
     }
 
-    private View showUserAddErrors(String error) {
+    private View showUserAddErrors(String error, User user) {
         View view = new ModelAndView("add-user-bootstrap");
         view.addParameter("error", error);
+        view.addParameter("user", user);
         return new RedirectView(view);
     }
 }

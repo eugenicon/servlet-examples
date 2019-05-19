@@ -14,19 +14,26 @@
                 <form method="post" action="add-user" class="form" role="form">
                     <div class="form-group">
                         <label for="name">Name:</label>
-                        <input type="text" class="form-control" id="name" name="name" placeholder="Enter Your Name">
+                        <input type="text" class="form-control" id="name" name="name" placeholder="Enter Your Name" value="${user.getName()}">
                     </div>
                     <div class="form-group">
                         <label for="age">Age:</label>
-                        <input type="number" class="form-control" id="age" name="age" placeholder="Enter Your Age">
+                        <input type="number" class="form-control" id="age" name="age" placeholder="Enter Your Age" value="${user.getAge()}">
                     </div>
 
                     <div class="form-group">
                         <label class="mr-sm-2" for="group_id">Group</label>
-                        <select class="custom-select mr-sm-2" id="group_id" name="group_id">
-                            <option selected>Choose...</option>
+                        <select class="custom-select mr-sm-2" id="group_id" name="group_id" >
+                            <c:if test="${user == null || user.getGroup() == null}">
+                                <option disabled hidden selected>Choose...</option>
+                            </c:if>
+                            <c:if test="${user.getGroup() != null}">
+                                <option value="${user.getGroup().getId()}" >${user.getGroup().getName()}</option>
+                            </c:if>
                             <c:forEach var="item" items="${groups}">
-                                <option value="${item.getId()}">${item.getName()}</option>
+                                <c:if test="${user.getGroup().getId() != item.getId()}">
+                                    <option value="${item.getId()}" >${item.getName()}</option>
+                                </c:if>
                             </c:forEach>
                         </select>
                     </div>

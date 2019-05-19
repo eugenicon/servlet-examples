@@ -14,6 +14,7 @@ public class UserDao {
 
         converter = rs -> {
             User user = new User();
+            user.setId(rs.getInt("id"));
             user.setName(rs.getString("name"));
             user.setAge(rs.getInt("age"));
             user.setGroup(groupDao.getById(rs.getInt("group_id")));
@@ -22,7 +23,7 @@ public class UserDao {
     }
 
     public List<User> getAll() {
-        return dataSource.selectQuery("select name, age, group_id from users", converter);
+        return dataSource.selectQuery("select id, name, age, group_id from users", converter);
     }
 
     public void save(User user) {
