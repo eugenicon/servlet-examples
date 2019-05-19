@@ -58,8 +58,8 @@ public class UserController {
     }
 
     @ExceptionMapping(ServiceException.class)
-    public View showUserAddErrors(ServiceException e, User user) {
-        return showUserAddErrors(e.getCause() == null ? e.getMessage() : e.getCause().getMessage(), user);
+    public View showUserAddErrors(ServiceException e) {
+        return showUserAddErrors(e.getCause() == null ? e.getMessage() : e.getCause().getMessage(), null);
     }
 
     @ExceptionMapping(ValidationException.class)
