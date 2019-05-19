@@ -54,7 +54,7 @@ public class UserController {
     @PostMapping("/add-user")
     public View addUser(@Valid User user) throws ServiceException {
         userService.addUser(user);
-        return new RedirectView(new ModelAndView("user-list"));
+        return new RedirectView(new ModelAndView("user-list-bootstrap"));
     }
 
     @ExceptionMapping(ServiceException.class)

@@ -21,7 +21,7 @@
                         <input type="number" class="form-control" id="age" name="age" placeholder="Enter Your Age">
                     </div>
 
-                    <div class="col-auto my-1">
+                    <div class="form-group">
                         <label class="mr-sm-2" for="group_id">Group</label>
                         <select class="custom-select mr-sm-2" id="group_id" name="group_id">
                             <option selected>Choose...</option>
@@ -34,11 +34,6 @@
                     <div class="form-group">
                         <label for="group">Comment:</label>
                         <textarea class="form-control" rows="5" id="group"></textarea>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="comment">Comment:</label>
-                        <textarea class="form-control" rows="5" id="comment"></textarea>
                     </div>
 
                     <button type="submit" class="btn btn-primary">Save</button>
