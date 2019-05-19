@@ -24,7 +24,9 @@ public class GroupDao {
     }
 
     public void save(Group group) {
-
+        dataSource.executeUpdate("insert into groups (name) values(?)", ps -> {
+            ps.setString(1, group.getName());
+        }, rs -> group.setId(rs.getInt(1)));
     }
 
     public Group getById(int groupId) {

@@ -1,7 +1,8 @@
-<%@ page import="java.util.List" %>
 <%@ page import="net.example.data.model.Group" %>
+<%@ page import="java.util.List" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@taglib prefix="t" tagdir="/WEB-INF/tags" %>
 <html>
 <head>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
@@ -12,14 +13,7 @@
     <title>New User</title>
 </head>
 <body>
-<%
-    List<Group> groups = (List<Group>) request.getAttribute("groups");
-    String error = (String) request.getAttribute("error");
-    if (error != null) {
-%> <h1 style="white-space: pre;"><%=error%>
-</h1> <%
-    }
-%>
+<t:exception/>
 <div class="container">
     <div class="row">
         <div class="col-sm-4">
@@ -40,6 +34,7 @@
                         <option selected>Choose...</option>
 
                         <%
+                            List<Group> groups = (List<Group>) request.getAttribute("groups");
                             for (Group group : groups) {
                         %>
                         <option value="<%=group.getId()%>"><%=group.getName()%></option>

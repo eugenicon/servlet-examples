@@ -16,7 +16,10 @@ public class UserTransformer implements Transformer<User> {
     @Override
     public User transform(HttpServletRequest request) {
         User user = new User();
-        user.setAge(Integer.parseInt(request.getParameter("age")));
+        String age = request.getParameter("age");
+        if (age != null && age.matches("\\d+")) {
+            user.setAge(Integer.parseInt(age));
+        }
         user.setName(request.getParameter("name"));
         try {
             int groupId = Integer.parseInt(request.getParameter("group_id"));

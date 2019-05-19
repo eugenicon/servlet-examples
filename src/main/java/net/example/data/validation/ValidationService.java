@@ -17,7 +17,7 @@ public class ValidationService {
     }
 
     public <T> List<String> validate(T data) {
-        ArrayList<String> validationErrors = new ArrayList<>();
+        List<String> validationErrors = new ArrayList<>();
         Method[] declaredMethods = data.getClass().getDeclaredMethods();
         for (Method method : declaredMethods) {
             Annotation[] declaredAnnotations = method.getDeclaredAnnotations();

@@ -1,5 +1,8 @@
 package net.example.servlet;
 
+import net.example.data.validation.Valid;
+import net.example.data.validation.ValidationException;
+import net.example.data.validation.ValidationService;
 import net.example.tranforemer.TransformationService;
 import net.example.view.RedirectView;
 import net.example.view.View;
@@ -11,10 +14,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.lang.reflect.Method;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
+import java.lang.reflect.Parameter;
+import java.util.*;
 import java.util.function.Function;
 
 import static net.example.util.Reflection.getAnnotatedMethods;
@@ -24,22 +25,37 @@ public class RequestResolver {
 
     private static final String VIEW_ATTRIBUTE = "VIEW_ATTRIBUTE";
 
-    private Map<String, Function<HttpServletRequest, View>> getControllers = new HashMap<>();
-    private Map<String, Function<HttpServletRequest, View>> postControllers = new HashMap<>();
-    private Map<String, Function<HttpServletRequest, View>> errorControllers = new HashMap<>();
+    private final ValidationService validationService;
+    private final TransformationService transformationService;
 
-    public RequestResolver(TransformationService transformationService, Object... controllers) {
+    private final Map<String, Function<HttpServletRequest, View>> getControllers = new HashMap<>();
+    private final Map<String, Function<HttpServletRequest, View>> postControllers = new HashMap<>();
+    private final Map<String, Function<HttpServletRequest, View>> errorControllers = new HashMap<>();
+
+    public RequestResolver(TransformationService transformationService, ValidationService validationService, Object... controllers) {
+        this.transformationService = transformationService;
+        this.validationService = validationService;
         for (Object controller : controllers) {
-            getAnnotatedMethods(controller.getClass(), GetMapping.class).forEach((method, mapping) -> getControllers.put(mapping.value(), request -> invokeController(transformationService, controller, method, request)));
-            getAnnotatedMethods(controller.getClass(), PostMapping.class).forEach((method, mapping) -> postControllers.put(mapping.value(), request -> invokeController(transformationService, controller, method, request)));
-            getAnnotatedMethods(controller.getClass(), ExceptionMapping.class).forEach((method, mapping) -> errorControllers.put(getExceptionMapping(controller, mapping.value()), request -> invokeController(transformationService, controller, method, request)));
+            getAnnotatedMethods(controller.getClass(), GetMapping.class).forEach((method, mapping) -> getControllers.put(mapping.value(), request -> invokeController(controller, method, request)));
+            getAnnotatedMethods(controller.getClass(), PostMapping.class).forEach((method, mapping) -> postControllers.put(mapping.value(), request -> invokeController(controller, method, request)));
+            getAnnotatedMethods(controller.getClass(), ExceptionMapping.class).forEach((method, mapping) -> errorControllers.put(getExceptionMapping(controller, mapping.value()), request -> invokeController(controller, method, request)));
         }
     }
 
-    private View invokeController(TransformationService transformationService, Object controller, Method method, HttpServletRequest request) {
+    private View invokeController(Object controller, Method method, HttpServletRequest request) {
         try {
-            Object[] args = Arrays.stream(method.getParameterTypes()).map(t -> transformationService.transform(request, t)).toArray();
-            return (View) method.invoke(controller, args);
+            List<Object> args = new ArrayList<>();
+            for (Parameter parameter : method.getParameters()) {
+                Object value = transformationService.transform(request, parameter.getType());
+                if (value != null && Arrays.stream(parameter.getAnnotations()).anyMatch(a -> a.annotationType().isAssignableFrom(Valid.class))) {
+                    List<String> validationErrors = validationService.validate(value);
+                    if (!validationErrors.isEmpty()) {
+                        throw new ValidationException(validationErrors);
+                    }
+                }
+                args.add(value);
+            }
+            return (View) method.invoke(controller, args.toArray());
         } catch (Exception e) {
             Throwable cause = e.getCause() == null ? e : e.getCause();
             LOGGER.warn("error while dispatching {} request {}", request.getMethod(), request.getRequestURI(), cause);

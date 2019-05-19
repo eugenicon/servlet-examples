@@ -19,4 +19,8 @@ public class GroupService {
     public Group getById(int id) {
         return groupDao.getById(id);
     }
+
+    public void save(Group group) {
+        groupDao.save(group);
+    }
 }

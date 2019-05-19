@@ -14,6 +14,7 @@ import net.example.data.validation.ValidationService;
 import net.example.service.GroupService;
 import net.example.service.UserService;
 import net.example.servlet.RequestResolver;
+import net.example.tranforemer.GroupTransformer;
 import net.example.tranforemer.TransformationService;
 import net.example.tranforemer.UserTransformer;
 import net.example.util.ResourceReader;
@@ -49,16 +50,18 @@ public class ComponentInitializer {
         );
 
         UserTransformer userTransformer = new UserTransformer(groupService);
-        TransformationService transformationService = new TransformationService(userTransformer);
+        GroupTransformer groupTransformer = new GroupTransformer();
+        TransformationService transformationService = new TransformationService(userTransformer, groupTransformer);
         transformationService.register(Exception.class, request -> request.getAttribute("error"));
         transformationService.register(HttpSession.class, HttpServletRequest::getSession);
 
         WelcomeController welcomeController = new WelcomeController();
-        UserController userController = new UserController(userService, groupService, validationService);
+        UserController userController = new UserController(userService, groupService);
         GroupController groupController = new GroupController(groupService);
         ErrorController errorController = new ErrorController();
 
-        requestResolver = new RequestResolver(transformationService, welcomeController, userController, groupController, errorController);
+        requestResolver = new RequestResolver(transformationService,validationService,
+                welcomeController, userController, groupController, errorController);
     }
 
     public static ComponentInitializer getInstance() {

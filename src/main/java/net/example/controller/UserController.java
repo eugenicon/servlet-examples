@@ -1,8 +1,8 @@
 package net.example.controller;
 
 import net.example.data.model.User;
+import net.example.data.validation.Valid;
 import net.example.data.validation.ValidationException;
-import net.example.data.validation.ValidationService;
 import net.example.service.GroupService;
 import net.example.service.ServiceException;
 import net.example.service.UserService;
@@ -14,17 +14,14 @@ import net.example.view.RedirectView;
 import net.example.view.View;
 
 import java.util.Date;
-import java.util.List;
 
 public class UserController {
     private final UserService userService;
     private final GroupService groupService;
-    private final ValidationService validationService;
 
-    public UserController(UserService userService, GroupService groupService, ValidationService validationService) {
+    public UserController(UserService userService, GroupService groupService) {
         this.userService = userService;
         this.groupService = groupService;
-        this.validationService = validationService;
     }
 
     @GetMapping("/user-list")
@@ -55,16 +52,9 @@ public class UserController {
     }
 
     @PostMapping("/add-user")
-    public View addUser(User user) throws ServiceException, ValidationException {
-        View view;
-        List<String> validationErrors = validationService.validate(user);
-        if (validationErrors.isEmpty()) {
-            userService.addUser(user);
-            view = new ModelAndView("user-list");
-        } else {
-            throw new ValidationException(validationErrors);
-        }
-        return new RedirectView(view);
+    public View addUser(@Valid User user) throws ServiceException {
+        userService.addUser(user);
+        return new RedirectView(new ModelAndView("user-list"));
     }
 
     @ExceptionMapping(ServiceException.class)
