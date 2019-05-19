@@ -14,22 +14,21 @@ import net.example.data.validation.ValidationService;
 import net.example.service.GroupService;
 import net.example.service.UserService;
 import net.example.servlet.RequestResolver;
+import net.example.tranforemer.TransformationService;
 import net.example.tranforemer.UserTransformer;
 import net.example.util.ResourceReader;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.util.Properties;
 
 public class ComponentInitializer {
     private static final Logger LOGGER = LogManager.getLogger(ComponentInitializer.class);
     private static ComponentInitializer instance;
 
-    private final WelcomeController welcomeController;
-    private final UserController userController;
-    private final GroupController groupController;
     private final RequestResolver requestResolver;
-    private final ErrorController errorController;
 
     private ComponentInitializer() {
         LOGGER.debug("ComponentInitializer created");
@@ -49,14 +48,17 @@ public class ComponentInitializer {
                 new ValidNumber.AnnotationProcessor()
         );
 
-        welcomeController = new WelcomeController();
-        userController = new UserController(userService, groupService, validationService);
-        groupController = new GroupController(groupService);
-        errorController = new ErrorController();
-
         UserTransformer userTransformer = new UserTransformer(groupService);
+        TransformationService transformationService = new TransformationService(userTransformer);
+        transformationService.register(Exception.class, request -> request.getAttribute("error"));
+        transformationService.register(HttpSession.class, HttpServletRequest::getSession);
 
-        requestResolver = new RequestResolver(welcomeController, userController, groupController, errorController, userTransformer);
+        WelcomeController welcomeController = new WelcomeController();
+        UserController userController = new UserController(userService, groupService, validationService);
+        GroupController groupController = new GroupController(groupService);
+        ErrorController errorController = new ErrorController();
+
+        requestResolver = new RequestResolver(transformationService, welcomeController, userController, groupController, errorController);
     }
 
     public static ComponentInitializer getInstance() {
@@ -69,18 +71,6 @@ public class ComponentInitializer {
         }
 
         return instance;
-    }
-
-    public WelcomeController getWelcomeController() {
-        return welcomeController;
-    }
-
-    public UserController getUserController() {
-        return userController;
-    }
-
-    public GroupController getGroupController() {
-        return groupController;
     }
 
     public RequestResolver getRequestResolver() {

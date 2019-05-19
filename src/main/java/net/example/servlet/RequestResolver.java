@@ -1,24 +1,23 @@
 package net.example.servlet;
 
-import net.example.controller.ErrorController;
-import net.example.controller.GroupController;
-import net.example.controller.UserController;
-import net.example.controller.WelcomeController;
-import net.example.tranforemer.UserTransformer;
+import net.example.tranforemer.TransformationService;
 import net.example.view.RedirectView;
 import net.example.view.View;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.lang.reflect.Method;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.Function;
+
+import static net.example.util.Reflection.getAnnotatedMethods;
 
 public class RequestResolver {
     private static final Logger LOGGER = LogManager.getLogger(RequestResolver.class);
@@ -27,21 +26,36 @@ public class RequestResolver {
 
     private Map<String, Function<HttpServletRequest, View>> getControllers = new HashMap<>();
     private Map<String, Function<HttpServletRequest, View>> postControllers = new HashMap<>();
+    private Map<String, Function<HttpServletRequest, View>> errorControllers = new HashMap<>();
 
-    public RequestResolver(WelcomeController welcomeController, UserController userController, GroupController groupController, ErrorController errorController, UserTransformer userTransformer) {
-        getControllers.put("/", r -> welcomeController.doWelcomeRedirect());
-        getControllers.put("/welcome", r -> welcomeController.doWelcome());
-        getControllers.put("/user-list", r -> userController.getUserList());
-        getControllers.put("/add-user", r -> userController.showAddUserPage());
-        getControllers.put("/user-list-bootstrap", r -> userController.getUserListBootstrap());
-        getControllers.put("/add-user-bootstrap", r -> userController.showAddUserPageBootstrap());
-        getControllers.put("/group-list", r -> groupController.getAll());
-        getControllers.put("/problem-page", r -> errorController.getViewWithSomeTestException());
-        getControllers.put("/error", r -> errorController.getErrorPage((Exception) r.getAttribute("error")));
-        getControllers.put("/template-example", r -> welcomeController.showTemplatePage());
+    public RequestResolver(TransformationService transformationService, Object... controllers) {
+        for (Object controller : controllers) {
+            getAnnotatedMethods(controller.getClass(), GetMapping.class).forEach((method, mapping) -> getControllers.put(mapping.value(), request -> invokeController(transformationService, controller, method, request)));
+            getAnnotatedMethods(controller.getClass(), PostMapping.class).forEach((method, mapping) -> postControllers.put(mapping.value(), request -> invokeController(transformationService, controller, method, request)));
+            getAnnotatedMethods(controller.getClass(), ExceptionMapping.class).forEach((method, mapping) -> errorControllers.put(getExceptionMapping(controller, mapping.value()), request -> invokeController(transformationService, controller, method, request)));
+        }
+    }
 
-        postControllers.put("/add-user", r -> userController.addUser(userTransformer.transform(r)));
-        postControllers.put("/error", getControllers.get("/error"));
+    private View invokeController(TransformationService transformationService, Object controller, Method method, HttpServletRequest request) {
+        try {
+            Object[] args = Arrays.stream(method.getParameterTypes()).map(t -> transformationService.transform(request, t)).toArray();
+            return (View) method.invoke(controller, args);
+        } catch (Exception e) {
+            Throwable cause = e.getCause() == null ? e : e.getCause();
+            LOGGER.warn("error while dispatching {} request {}", request.getMethod(), request.getRequestURI(), cause);
+
+            String exceptionMapping = getExceptionMapping(controller, cause.getClass());
+            if (errorControllers.containsKey(exceptionMapping)) {
+                request.setAttribute("error", cause);
+                return errorControllers.get(exceptionMapping).apply(request);
+            } else {
+                throw new RuntimeException(cause);
+            }
+        }
+    }
+
+    private String getExceptionMapping(Object controller, Class<? extends Throwable> eClass) {
+        return String.format("%s:%s", controller, eClass);
     }
 
     public void resolveGetRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -53,13 +67,12 @@ public class RequestResolver {
     }
 
     private void dispatch(HttpServletRequest request, HttpServletResponse response, Map<String, Function<HttpServletRequest, View>> getControllers) throws IOException, ServletException {
-        LOGGER.info("dispatching request {}", request.getRequestURI());
+        LOGGER.info("dispatching {} request {}", request.getMethod(), request.getRequestURI());
         try {
             dispatch(getView(request, getControllers), request, response);
         } catch (Exception e) {
-            RequestDispatcher requestDispatcher = request.getRequestDispatcher("/view/error");
             request.setAttribute("error", e);
-            requestDispatcher.forward(request, response);
+            request.getRequestDispatcher("/view/error").forward(request, response);
         }
     }
 
@@ -69,8 +82,9 @@ public class RequestResolver {
             response.sendRedirect(view.getPageUrl());
         } else if (view != null){
             view.getParams().forEach(request::setAttribute);
-            RequestDispatcher requestDispatcher = request.getRequestDispatcher("/" + view.getPageUrl());
-            requestDispatcher.forward(request, response);
+            request.getRequestDispatcher("/" + view.getPageUrl()).forward(request, response);
+        } else {
+            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
         }
     }
 

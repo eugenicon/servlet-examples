@@ -1,6 +1,7 @@
 package net.example.controller;
 
 import net.example.service.GroupService;
+import net.example.servlet.GetMapping;
 import net.example.view.ModelAndView;
 
 public class GroupController {
@@ -10,6 +11,7 @@ public class GroupController {
         this.groupService = groupService;
     }
 
+    @GetMapping("/group-list")
     public ModelAndView getAll() {
         ModelAndView view = new ModelAndView("WEB-INF/jsp/groups-page.jsp");
         view.addParameter("listOfData", groupService.getAllGroups());

@@ -27,4 +27,9 @@ public class UserTransformer implements Transformer<User> {
         }
         return user;
     }
+
+    @Override
+    public Class<User> getSupportedType() {
+        return User.class;
+    }
 }
