@@ -1,55 +1,37 @@
-<%@ page import="net.example.data.model.User" %>
-<%@ page import="java.util.List" %>
-<%@ page import="java.util.Date" %>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<html>
-<head>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+<%@ page contentType="text/html" pageEncoding="UTF-8" %>
+<%@ taglib prefix="t" tagdir="/WEB-INF/tags" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
-    <title>Bootstrap Page</title>
-</head>
-<body>
-<%
-    Date date = (Date) request.getAttribute("currentDateFromBackend");
-%>
-<h1>Greetings! </h1>
-<h3>It's  <%=date == null ? "some unknown time" : date%> on our server</h3>
-<div class="container">
-    <div class="row">
-        <div class="col-sm-4">
-            <table class="table table-bordered">
-                <thead>
-                <tr>
-                    <th>User Name</th>
-                    <th>Age</th>
-                    <th>Group</th>
-                </tr>
-                </thead>
-                <% List<User> users = (List<User>) request.getAttribute("listOfData");
-                    for (User user : users) { %>
+<t:generic-page title="Users">
+    <jsp:attribute name="header">
+      <h1>Users</h1>
+    </jsp:attribute>
 
-                <tr>
-                    <td>
-                        <%=user.getName()%>
-                    </td>
-                    <td>
-                        <%=user.getAge()%>
-                    </td>
-                    <td>
-                        <%=user.getGroup() == null ? "" : user.getGroup().getName()%>
-                    </td>
-                </tr>
+    <jsp:body>
+        <div class="row">
+            <div class="col-sm-12">
+                <table class="table table-bordered">
+                    <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>Name</th>
+                        <th>Age</th>
+                        <th>Group</th>
+                    </tr>
+                    </thead>
 
-                <%} %>
-            </table>
+                    <c:forEach var="item" items="${listOfData}">
+                        <tr>
+                            <td>${item.getId()}</td>
+                            <td>${item.getName()}</td>
+                            <td>${item.getAge()}</td>
+                            <td>${item.getGroup().getName()}</td>
+                        </tr>
+                    </c:forEach>
+                </table>
 
-            <a href="add-user-bootstrap" class="btn btn-primary">Add</a>
+                <a href="add-user-bootstrap" class="btn btn-primary floating-button">Add</a>
+            </div>
         </div>
-    </div>
-</div>
-</body>
-</html>
+    </jsp:body>
+</t:generic-page>

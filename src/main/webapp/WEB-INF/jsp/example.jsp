@@ -1,7 +1,7 @@
 <%@page contentType="text/html" pageEncoding="UTF-8" %>
 <%@taglib prefix="t" tagdir="/WEB-INF/tags" %>
 
-<t:genericpage>
+<t:generic-page>
     <jsp:attribute name="title">
       Template Page
     </jsp:attribute>
@@ -19,4 +19,4 @@
             </div>
         </div>
     </jsp:body>
-</t:genericpage>
+</t:generic-page>

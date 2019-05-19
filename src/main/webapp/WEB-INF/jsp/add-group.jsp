@@ -1,21 +1,15 @@
 <%@page contentType="text/html" pageEncoding="UTF-8" %>
 <%@taglib prefix="t" tagdir="/WEB-INF/tags" %>
 
-<t:genericpage>
-    <jsp:attribute name="title">
-      Add Group
-    </jsp:attribute>
+<t:generic-page title="Add Group">
     <jsp:attribute name="header">
       <h1>Add Group</h1>
-    </jsp:attribute>
-    <jsp:attribute name="footer">
-      <p id="copyright">Copyright 2019, Bla-Bla-Bla Inc.</p>
     </jsp:attribute>
 
     <jsp:body>
         <t:exception/>
         <div class="row">
-            <div class="col-sm-4">
+            <div class="col-sm-12">
                 <form method="post" action="add-group" class="form" role="form">
                     <div class="form-group">
                         <label for="name">Name:</label>
@@ -32,4 +26,4 @@
             </div>
         </div>
     </jsp:body>
-</t:genericpage>
+</t:generic-page>
