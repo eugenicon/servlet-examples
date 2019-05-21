@@ -1,10 +1,13 @@
 <%@ page contentType="text/html" pageEncoding="UTF-8" %>
 <%@ taglib prefix="t" tagdir="/WEB-INF/tags" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<fmt:setLocale value="${sessionScope.lang}" />
+<fmt:setBundle basename="messages" />
 
 <t:generic-page title="Groups">
     <jsp:attribute name="header">
-      <h1>Groups</h1>
+      <h1><fmt:message key="label.groups"/></h1>
     </jsp:attribute>
 
     <jsp:body>
@@ -14,7 +17,7 @@
                     <thead>
                     <tr>
                         <th>Id</th>
-                        <th>Name</th>
+                        <th><fmt:message key="label.name"/></th>
                     </tr>
                     </thead>
 
@@ -26,7 +29,7 @@
                     </c:forEach>
                 </table>
 
-                <a href="add-group" class="btn btn-primary floating-button">Add</a>
+                <a href="add-group" class="btn btn-primary floating-button"><fmt:message key="label.add"/></a>
             </div>
         </div>
     </jsp:body>

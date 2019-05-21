@@ -1,9 +1,6 @@
 package net.example.config;
 
-import net.example.controller.ErrorController;
-import net.example.controller.GroupController;
-import net.example.controller.UserController;
-import net.example.controller.WelcomeController;
+import net.example.controller.*;
 import net.example.data.dao.DataSource;
 import net.example.data.dao.GroupDao;
 import net.example.data.dao.UserDao;
@@ -21,7 +18,6 @@ import net.example.util.ResourceReader;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.Properties;
 
@@ -59,9 +55,10 @@ public class ComponentInitializer {
         UserController userController = new UserController(userService, groupService);
         GroupController groupController = new GroupController(groupService);
         ErrorController errorController = new ErrorController();
+        LocalizationController localizationController = new LocalizationController();
 
         requestResolver = new RequestResolver(transformationService,validationService,
-                welcomeController, userController, groupController, errorController);
+                welcomeController, userController, groupController, errorController, localizationController);
     }
 
     public static ComponentInitializer getInstance() {

@@ -1,10 +1,13 @@
 <%@page contentType="text/html" pageEncoding="UTF-8" %>
 <%@taglib prefix="t" tagdir="/WEB-INF/tags" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<fmt:setLocale value="${sessionScope.lang}" />
+<fmt:setBundle basename="messages" />
 
 <t:generic-page title="Add User">
     <jsp:attribute name="header">
-      <h1>Add User</h1>
+      <h1><fmt:message key="label.add-user"/></h1>
     </jsp:attribute>
 
     <jsp:body>
@@ -13,19 +16,22 @@
             <div class="col-sm-12">
                 <form method="post" action="add-user" class="form" role="form">
                     <div class="form-group">
-                        <label for="name">Name:</label>
-                        <input type="text" class="form-control" id="name" name="name" placeholder="Enter Your Name" value="${user.getName()}">
+                        <fmt:message key="label.enter-user-name" var="enterUserName" />
+                        <label for="name"><fmt:message key="label.name"/>:</label>
+                        <input type="text" class="form-control" id="name" name="name" placeholder="${enterUserName}" value="${user.getName()}">
                     </div>
                     <div class="form-group">
-                        <label for="age">Age:</label>
-                        <input type="number" class="form-control" id="age" name="age" placeholder="Enter Your Age" value="${user.getAge()}">
+                        <fmt:message key="label.enter-user-age" var="enterUserAge" />
+                        <label for="age"><fmt:message key="label.age"/>:</label>
+                        <input type="number" class="form-control" id="age" name="age" placeholder="${enterUserAge}" value="${user.getAge()}">
                     </div>
 
                     <div class="form-group">
-                        <label class="mr-sm-2" for="group_id">Group</label>
+                        <label class="mr-sm-2" for="group_id"><fmt:message key="label.group"/></label>
                         <select class="custom-select mr-sm-2" id="group_id" name="group_id" >
                             <c:if test="${user == null || user.getGroup() == null}">
-                                <option disabled hidden selected>Choose...</option>
+                                <fmt:message key="label.enter-user-group" var="enterUserGroup" />
+                                <option disabled hidden selected>${enterUserGroup}...</option>
                             </c:if>
                             <c:if test="${user.getGroup() != null}">
                                 <option value="${user.getGroup().getId()}" >${user.getGroup().getName()}</option>
@@ -39,11 +45,11 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="group">Comment:</label>
+                        <label for="group"><fmt:message key="label.comment"/>:</label>
                         <textarea class="form-control" rows="5" id="group"></textarea>
                     </div>
 
-                    <button type="submit" class="btn btn-primary">Save</button>
+                    <button type="submit" class="btn btn-primary"><fmt:message key="label.save"/></button>
                 </form>
             </div>
         </div>

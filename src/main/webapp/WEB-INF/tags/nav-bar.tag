@@ -1,4 +1,5 @@
 <%@taglib prefix="t" tagdir="/WEB-INF/tags" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
 <%@tag description="Application navigation bar" pageEncoding="UTF-8" %>
 
@@ -9,9 +10,27 @@
     </button>
     <div class="collapse navbar-collapse" id="navbarsExampleDefault">
         <ul class="navbar-nav mr-auto">
-            <t:nav-item url="welcome" label="Home"/>
-            <t:nav-item url="group-list" label="Groups"/>
-            <t:nav-item url="user-list-bootstrap" label="Users"/>
+            <t:nav-item url="welcome" label="home"/>
+            <t:nav-item url="group-list" label="groups"/>
+            <t:nav-item url="user-list-bootstrap" label="users"/>
+
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">${sessionScope.lang}</a>
+                <div class="dropdown-menu" aria-labelledby="dropdown01">
+                    <div class="dropdown-item" >
+                        <form role="form" method="post" action="set-language" style="margin-bottom: 0px;">
+                            <input type="hidden" name="language" value="en">
+                            <button class="btn btn-flat" type="submit">EN</button>
+                        </form>
+                    </div>
+                    <div class="dropdown-item" >
+                        <form role="form" method="post" action="set-language" style="margin-bottom: 0px;">
+                            <input type="hidden" name="language" value="ru">
+                            <button class="btn btn-flat" type="submit">RU</button>
+                        </form>
+                    </div>
+                </div>
+            </li>
         </ul>
         <form class="form-inline my-2 my-lg-0">
             <input class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search">

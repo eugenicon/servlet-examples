@@ -111,6 +111,7 @@ public class RequestResolver {
     }
 
     private View getView(String key, HttpServletRequest request, Map<String, Function<HttpServletRequest, View>> controllerSource) {
+        request.setAttribute("refererUrl", getRefererUrl(request));
         View originView = (View) request.getSession().getAttribute(VIEW_ATTRIBUTE);
         request.getSession().removeAttribute(VIEW_ATTRIBUTE);
 
@@ -119,5 +120,13 @@ public class RequestResolver {
             originView.getParams().forEach(destinationView::addParameter);
         }
         return destinationView;
+    }
+
+    private String getRefererUrl(HttpServletRequest request) {
+        String refererUrl = request.getHeader("Referer");
+        if (refererUrl != null && refererUrl.contains(request.getContextPath())) {
+            refererUrl = refererUrl.substring(refererUrl.indexOf(request.getContextPath()) + request.getContextPath().length() + 1);
+        }
+        return refererUrl;
     }
 }
