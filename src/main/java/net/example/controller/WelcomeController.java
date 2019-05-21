@@ -9,7 +9,7 @@ public class WelcomeController {
 
     @GetMapping("/welcome")
     public View doWelcome() {
-        return new ModelAndView("WEB-INF/jsp/welcome.jsp");
+        return new ModelAndView("welcome.jsp");
     }
 
     @GetMapping("/")
@@ -19,6 +19,6 @@ public class WelcomeController {
 
     @GetMapping("/template-example")
     public View showTemplatePage() {
-        return new ModelAndView("WEB-INF/jsp/example.jsp");
+        return new ModelAndView("example.jsp");
     }
 }

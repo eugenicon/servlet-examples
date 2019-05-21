@@ -20,14 +20,14 @@ public class GroupController {
 
     @GetMapping("/group-list")
     public ModelAndView getAll() {
-        ModelAndView view = new ModelAndView("WEB-INF/jsp/groups-page.jsp");
+        ModelAndView view = new ModelAndView("groups-page.jsp");
         view.addParameter("listOfData", groupService.getAllGroups());
         return view;
     }
 
     @GetMapping("/add-group")
     public ModelAndView addGroup() {
-        return new ModelAndView("WEB-INF/jsp/add-group.jsp");
+        return new ModelAndView("add-group.jsp");
     }
 
     @PostMapping("/add-group")
@@ -37,9 +37,10 @@ public class GroupController {
     }
 
     @ExceptionMapping(ValidationException.class)
-    public View onValidationException(ValidationException e) {
+    public View onValidationException(ValidationException error, Group group) {
         View view = new ModelAndView("add-group");
-        view.addParameter("error", String.join("\n", e.getErrors()));
+        view.addParameter("error", String.join("\n", error.getErrors()));
+        view.addParameter("group", group);
         return new RedirectView(view);
     }
 }

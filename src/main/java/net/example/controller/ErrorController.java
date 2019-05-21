@@ -8,9 +8,9 @@ public class ErrorController {
 
     @GetMapping("/error")
     @PostMapping("/error")
-    public ModelAndView getErrorPage(Exception e) {
-        ModelAndView view = new ModelAndView("WEB-INF/jsp/error-page.jsp");
-        view.addParameter("error", e);
+    public ModelAndView getErrorPage(Exception error) {
+        ModelAndView view = new ModelAndView("error-page.jsp");
+        view.addParameter("error", error);
         return view;
     }
 

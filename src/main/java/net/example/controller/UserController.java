@@ -26,7 +26,7 @@ public class UserController {
 
     @GetMapping("/user-list")
     public ModelAndView getUserList() {
-        ModelAndView view = new ModelAndView("WEB-INF/jsp/list-sample.jsp");
+        ModelAndView view = new ModelAndView("list-sample.jsp");
         view.addParameter("currentDateFromBackend", new Date());
         view.addParameter("listOfData", userService.getAllUsers());
         return view;
@@ -35,18 +35,18 @@ public class UserController {
     @GetMapping("/user-list-bootstrap")
     public View getUserListBootstrap() {
         ModelAndView view = getUserList();
-        view.setPageUrl("WEB-INF/jsp/bootstrap-list-sample.jsp");
+        view.setPageUrl("bootstrap-list-sample.jsp");
         return view;
     }
 
     @GetMapping("/add-user")
     public View showAddUserPage() {
-        return new ModelAndView("WEB-INF/jsp/add-user.jsp");
+        return new ModelAndView("add-user.jsp");
     }
 
     @GetMapping("/add-user-bootstrap")
     public View showAddUserPageBootstrap() {
-        ModelAndView modelAndView = new ModelAndView("WEB-INF/jsp/add-user-bootstrap.jsp");
+        ModelAndView modelAndView = new ModelAndView("add-user-bootstrap.jsp");
         modelAndView.addParameter("groups", groupService.getAllGroups());
         return modelAndView;
     }
@@ -58,13 +58,13 @@ public class UserController {
     }
 
     @ExceptionMapping(ServiceException.class)
-    public View showUserAddErrors(ServiceException e) {
-        return showUserAddErrors(e.getCause() == null ? e.getMessage() : e.getCause().getMessage(), null);
+    public View showUserAddErrors(ServiceException error) {
+        return showUserAddErrors(error.getCause() == null ? error.getMessage() : error.getCause().getMessage(), null);
     }
 
     @ExceptionMapping(ValidationException.class)
-    public View showUserAddErrors(ValidationException e, User user) {
-        return showUserAddErrors(String.join("\n", e.getErrors()), user);
+    public View showUserAddErrors(ValidationException error, User user) {
+        return showUserAddErrors(String.join("\n", error.getErrors()), user);
     }
 
     private View showUserAddErrors(String error, User user) {

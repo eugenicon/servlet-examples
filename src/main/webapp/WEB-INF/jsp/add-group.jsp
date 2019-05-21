@@ -13,7 +13,7 @@
                 <form method="post" action="add-group" class="form" role="form">
                     <div class="form-group">
                         <label for="name">Name:</label>
-                        <input type="text" class="form-control" id="name" name="name" placeholder="Enter Group Name">
+                        <input type="text" class="form-control" id="name" name="name" placeholder="Enter Group Name" value="${group.getName()}">
                     </div>
 
                     <div class="form-group">

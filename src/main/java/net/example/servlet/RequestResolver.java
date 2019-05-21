@@ -97,8 +97,9 @@ public class RequestResolver {
             request.getSession().setAttribute(VIEW_ATTRIBUTE, view.getView());
             response.sendRedirect(view.getPageUrl());
         } else if (view != null){
+            String pageUrl = (view.getPageUrl().endsWith(".jsp") ? "WEB-INF/jsp/" : "") + view.getPageUrl();
             view.getParams().forEach(request::setAttribute);
-            request.getRequestDispatcher("/" + view.getPageUrl()).forward(request, response);
+            request.getRequestDispatcher("/" + pageUrl).forward(request, response);
         } else {
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
         }
