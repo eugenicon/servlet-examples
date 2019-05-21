@@ -46,7 +46,7 @@ public class RequestResolver {
         try {
             List<Object> args = new ArrayList<>();
             for (Parameter parameter : method.getParameters()) {
-                Object value = transformationService.transform(request, parameter.getType());
+                Object value = transformationService.transform(request, parameter);
                 if (value != null && Arrays.stream(parameter.getAnnotations()).anyMatch(a -> a.annotationType().isAssignableFrom(Valid.class))) {
                     List<String> validationErrors = validationService.validate(value);
                     if (!validationErrors.isEmpty()) {

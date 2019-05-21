@@ -52,8 +52,8 @@ public class ComponentInitializer {
         UserTransformer userTransformer = new UserTransformer(groupService);
         GroupTransformer groupTransformer = new GroupTransformer();
         TransformationService transformationService = new TransformationService(userTransformer, groupTransformer);
-        transformationService.register(Exception.class, request -> request.getAttribute("error"));
-        transformationService.register(HttpSession.class, HttpServletRequest::getSession);
+        transformationService.register(Object.class, (r, p) -> r.getAttribute(p.getName()) == null ? r.getParameter(p.getName()) : r.getAttribute(p.getName()));
+        transformationService.register(HttpSession.class, (r, p) -> r.getSession());
 
         WelcomeController welcomeController = new WelcomeController();
         UserController userController = new UserController(userService, groupService);

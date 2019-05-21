@@ -5,6 +5,7 @@ import net.example.data.model.User;
 import net.example.service.GroupService;
 
 import javax.servlet.http.HttpServletRequest;
+import java.lang.reflect.Parameter;
 
 public class UserTransformer implements Transformer<User> {
     private GroupService groupService;
@@ -14,7 +15,7 @@ public class UserTransformer implements Transformer<User> {
     }
 
     @Override
-    public User transform(HttpServletRequest request) {
+    public User transform(HttpServletRequest request, Parameter parameter) {
         User user = new User();
         String age = request.getParameter("age");
         if (age != null && age.matches("\\d+")) {
