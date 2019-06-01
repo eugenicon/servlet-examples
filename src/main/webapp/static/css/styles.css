@@ -27,3 +27,11 @@
     text-align: left !important;
     padding: 0 !important;
 }
+
+.title {
+    font-weight: bold;
+}
+
+.clickable {
+    cursor: pointer
+}

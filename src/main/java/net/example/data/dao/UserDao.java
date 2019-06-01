@@ -5,6 +5,7 @@ import net.example.data.model.User;
 import net.example.resolver.Component;
 
 import java.util.List;
+import java.util.Optional;
 
 @Component
 public class UserDao {
@@ -38,5 +39,9 @@ public class UserDao {
 
     public List<User> getUsersByGroup(Group group) {
         return dataSource.selectQuery("select name, age, group_id from users where group_id = ?", converter, ps -> ps.setInt(1, group.getId()));
+    }
+
+    public Optional<User> getById(Integer id) {
+        return dataSource.selectFirst("select id, name, age, group_id from users where id = ?", converter, ps -> ps.setInt(1, id));
     }
 }

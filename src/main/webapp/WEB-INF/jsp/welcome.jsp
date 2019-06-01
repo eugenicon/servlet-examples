@@ -17,7 +17,7 @@
             <a href="add-user-regular">add-user</a>
         </p>
         <p>
-            <a href="user-list">user-list-bootstrap</a>
+            <a href="user/list">user-list-bootstrap</a>
         </p>
 
         <p>
@@ -34,6 +34,10 @@
 
         <p>
             <a href="template-example">template-example</a>
+        </p>
+
+        <p>
+            <a href="not-exists">not-exists</a>
         </p>
     </jsp:body>
 </t:generic-page>

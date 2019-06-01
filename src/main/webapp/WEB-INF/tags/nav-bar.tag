@@ -12,7 +12,7 @@
         <ul class="navbar-nav mr-auto">
             <t:nav-item url="welcome" label="home"/>
             <t:nav-item url="group-list" label="groups"/>
-            <t:nav-item url="user-list" label="users"/>
+            <t:nav-item url="user/list" label="users"/>
 
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">${sessionScope.lang}</a>

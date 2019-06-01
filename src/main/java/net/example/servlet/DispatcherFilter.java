@@ -29,7 +29,17 @@ public class DispatcherFilter implements Filter {
         if (permittedUrls.stream().anyMatch(path::startsWith)) {
             chain.doFilter(request, response);
         } else {
+            String refererUrl = getRefererUrl(httpRequest);
+            request.setAttribute("refererUrl", refererUrl);
             request.getRequestDispatcher(dispatcherUrl + path).forward(request, response);
         }
+    }
+
+    private String getRefererUrl(HttpServletRequest request) {
+        String refererUrl = request.getHeader("Referer");
+        if (refererUrl != null && refererUrl.contains(request.getContextPath())) {
+            refererUrl = refererUrl.substring(refererUrl.indexOf(request.getContextPath()) + request.getContextPath().length() + 1);
+        }
+        return refererUrl;
     }
 }

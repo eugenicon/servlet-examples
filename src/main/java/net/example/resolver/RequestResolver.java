@@ -18,6 +18,8 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 import java.util.*;
 import java.util.function.Function;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static net.example.util.Reflection.getAnnotatedMethods;
 import static net.example.util.Reflection.isAnnotated;
@@ -90,7 +92,7 @@ public class RequestResolver {
         try {
             dispatch(getView(request, getControllers), request, response);
         } catch (Exception e) {
-            request.setAttribute("error", e);
+            request.setAttribute("error", e.getCause());
             request.getRequestDispatcher("/view/error").forward(request, response);
         }
     }
@@ -109,27 +111,45 @@ public class RequestResolver {
     }
 
     private View getView(HttpServletRequest request, Map<String, Function<HttpServletRequest, View>> controllerSource) {
-        String requestURI = request.getRequestURI().replace(request.getContextPath() + "/view", "");
-        return getView(requestURI, request, controllerSource);
-    }
-
-    private View getView(String key, HttpServletRequest request, Map<String, Function<HttpServletRequest, View>> controllerSource) {
-        request.setAttribute("refererUrl", getRefererUrl(request));
         View originView = (View) request.getSession().getAttribute(VIEW_ATTRIBUTE);
         request.getSession().removeAttribute(VIEW_ATTRIBUTE);
 
-        View destinationView = Optional.ofNullable(controllerSource.get(key)).map(f -> f.apply(request)).orElse(null);
+        String key = resolvePath(request, controllerSource.keySet());
+        View destinationView = Optional.ofNullable(controllerSource.get(key)).map(t -> t.apply(request)).orElse(null);
         if (originView != null && destinationView != null) {
             originView.getParams().forEach(destinationView::addParameter);
         }
         return destinationView;
     }
 
-    private String getRefererUrl(HttpServletRequest request) {
-        String refererUrl = request.getHeader("Referer");
-        if (refererUrl != null && refererUrl.contains(request.getContextPath())) {
-            refererUrl = refererUrl.substring(refererUrl.indexOf(request.getContextPath()) + request.getContextPath().length() + 1);
+    private String resolvePath(HttpServletRequest request, Set<String> keys) {
+        String key = request.getRequestURI().replace(request.getContextPath() + "/view", "");
+        if (keys.contains(key)) {
+            return key;
         }
-        return refererUrl;
+
+        for (String k : keys) {
+            String[] pathParts = k.split("\\{");
+            StringBuilder pattern = new StringBuilder(pathParts[0]);
+            for (int i = 1; i < pathParts.length; i++) {
+                String[] subParts = pathParts[i].split("\\}");
+                pattern.append("(.+)");
+                for (int j = 1; j < subParts.length; j++) {
+                    pattern.append(subParts[j]);
+                }
+            }
+            pattern.append("$");
+            Matcher matcher = Pattern.compile(pattern.toString()).matcher(key);
+            if (matcher.find()) {
+                for (int i = 1; i < pathParts.length; i++) {
+                    String paramName = pathParts[i].split("\\}")[0];
+                    String paramValue = matcher.group(i);
+                    request.setAttribute(paramName, paramValue);
+                }
+
+                return k;
+            }
+        }
+        return "";
     }
 }

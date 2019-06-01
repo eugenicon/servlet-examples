@@ -30,4 +30,8 @@ public class UserService {
     public List<User> getUsersInGroup(Group group) {
         return userDao.getUsersByGroup(group);
     }
+
+    public User getById(Integer id) throws ServiceException {
+        return userDao.getById(id).orElseThrow(() -> new ServiceException("Could not find user with id " + id));
+    }
 }

@@ -12,7 +12,7 @@
 
     <jsp:body>
         <div class="row">
-            <div class="col-sm-12">
+            <div class="col">
                 <table class="table table-bordered">
                     <thead>
                     <tr>
@@ -24,7 +24,7 @@
                     </thead>
 
                     <c:forEach var="item" items="${listOfData}">
-                        <tr>
+                        <tr class="clickable" onclick="navigate('user/${item.getId()}/info')">
                             <td>${item.getId()}</td>
                             <td>${item.getName()}</td>
                             <td>${item.getAge()}</td>
@@ -33,7 +33,7 @@
                     </c:forEach>
                 </table>
 
-                <a href="add-user" class="btn btn-primary floating-button"><fmt:message key="label.add"/></a>
+                <a href="user/add" class="btn btn-primary floating-button"><fmt:message key="label.add"/></a>
             </div>
         </div>
     </jsp:body>
