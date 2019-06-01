@@ -1,16 +1,19 @@
 package net.example.data.validation;
 
+import net.example.resolver.Component;
+
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.util.*;
 import java.util.logging.Logger;
 
+@Component
 public class ValidationService {
     private static final Logger LOGGER = Logger.getLogger(ValidationService.class.getName());
     private final ResourceBundle resourceBundle = ResourceBundle.getBundle("messages");
     private Map<Class<? extends Annotation>, ValidationAnnotationProcessor<Object, Annotation>> validators = new HashMap<>();
 
-    public ValidationService(ValidationAnnotationProcessor... validators) {
+    public ValidationService(List<ValidationAnnotationProcessor<Object, Annotation>> validators) {
         for (ValidationAnnotationProcessor<Object, Annotation> validator : validators) {
             this.validators.put(validator.getSupportedType(), validator);
         }

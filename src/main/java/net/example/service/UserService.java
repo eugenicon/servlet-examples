@@ -3,9 +3,11 @@ package net.example.service;
 import net.example.data.dao.UserDao;
 import net.example.data.model.Group;
 import net.example.data.model.User;
+import net.example.resolver.Component;
 
 import java.util.List;
 
+@Component
 public class UserService {
     private UserDao userDao;
 

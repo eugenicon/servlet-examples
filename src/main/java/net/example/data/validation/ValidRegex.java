@@ -1,5 +1,7 @@
 package net.example.data.validation;
 
+import net.example.resolver.Component;
+
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -11,6 +13,7 @@ public @interface ValidRegex {
     String regex();
     String message();
 
+    @Component
     class AnnotationProcessor implements ValidationAnnotationProcessor<String, ValidRegex> {
         @Override
         public Class<ValidRegex> getSupportedType() {

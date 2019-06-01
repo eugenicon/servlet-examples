@@ -1,6 +1,7 @@
 package net.example.servlet;
 
-import net.example.config.ComponentInitializer;
+import net.example.resolver.DependencyResolver;
+import net.example.resolver.RequestResolver;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -13,7 +14,7 @@ public class DispatcherServlet extends HttpServlet {
 
     @Override
     public void init() throws ServletException {
-        requestResolver = ComponentInitializer.getInstance().getRequestResolver();
+        requestResolver = DependencyResolver.getComponent(RequestResolver.class);
     }
 
     @Override

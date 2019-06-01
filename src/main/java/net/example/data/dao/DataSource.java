@@ -1,5 +1,6 @@
 package net.example.data.dao;
 
+import net.example.resolver.Component;
 import net.example.util.ResourceReader;
 
 import java.sql.*;
@@ -10,6 +11,7 @@ import java.util.Properties;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
+@Component
 public class DataSource {
 
     private final String userName;

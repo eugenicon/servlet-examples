@@ -2,11 +2,13 @@ package net.example.tranforemer;
 
 import net.example.data.model.Group;
 import net.example.data.model.User;
+import net.example.resolver.Component;
 import net.example.service.GroupService;
 
 import javax.servlet.http.HttpServletRequest;
 import java.lang.reflect.Parameter;
 
+@Component
 public class UserTransformer implements Transformer<User> {
     private GroupService groupService;
 

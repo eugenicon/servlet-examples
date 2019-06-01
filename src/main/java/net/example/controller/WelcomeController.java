@@ -1,11 +1,13 @@
 package net.example.controller;
 
-import net.example.servlet.GetMapping;
+import net.example.resolver.Component;
+import net.example.resolver.GetMapping;
 import net.example.view.ModelAndView;
 import net.example.view.RedirectView;
 import net.example.view.View;
 
-public class WelcomeController {
+@Component
+public class WelcomeController implements Controller {
 
     @GetMapping("/welcome")
     public View doWelcome() {

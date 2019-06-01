@@ -2,9 +2,11 @@ package net.example.data.dao;
 
 import net.example.data.model.Group;
 import net.example.data.model.User;
+import net.example.resolver.Component;
 
 import java.util.List;
 
+@Component
 public class UserDao {
     private DataSource dataSource;
     private DataSource.SqlFunction<User> converter;

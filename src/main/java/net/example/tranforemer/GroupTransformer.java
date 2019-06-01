@@ -1,10 +1,12 @@
 package net.example.tranforemer;
 
 import net.example.data.model.Group;
+import net.example.resolver.Component;
 
 import javax.servlet.http.HttpServletRequest;
 import java.lang.reflect.Parameter;
 
+@Component
 public class GroupTransformer implements Transformer<Group> {
 
     @Override

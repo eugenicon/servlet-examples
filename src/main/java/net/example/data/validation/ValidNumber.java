@@ -1,5 +1,7 @@
 package net.example.data.validation;
 
+import net.example.resolver.Component;
+
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -12,6 +14,7 @@ public @interface ValidNumber {
     int max() default Integer.MAX_VALUE;
     String message();
 
+    @Component
     class AnnotationProcessor implements ValidationAnnotationProcessor<Number, ValidNumber> {
         @Override
         public Class<ValidNumber> getSupportedType() {

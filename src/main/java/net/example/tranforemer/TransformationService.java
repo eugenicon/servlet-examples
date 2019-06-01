@@ -1,18 +1,19 @@
 package net.example.tranforemer;
 
+import net.example.resolver.Component;
+
 import javax.servlet.http.HttpServletRequest;
 import java.lang.reflect.Parameter;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
-import java.util.function.BiFunction;
 
+@Component
 public class TransformationService {
-    private Map<Class, BiFunction<HttpServletRequest, Parameter, Object>> transformers = new HashMap<>();
+    private Map<Class, Transformer> transformers = new HashMap<>();
 
-    public TransformationService(Transformer... transformers) {
-        for (Transformer transformer : transformers) {
-            this.transformers.put(transformer.getSupportedType(), transformer::transform);
-        }
+    public TransformationService(List<Transformer> transformers) {
+        transformers.forEach(t -> this.transformers.put(t.getSupportedType(), t));
     }
 
     @SuppressWarnings("unchecked")
@@ -20,15 +21,11 @@ public class TransformationService {
         Class<?> type = parameter.getType();
         while (type != null) {
             if (transformers.containsKey(type)) {
-                return (T) transformers.get(type).apply(request, parameter);
+                return (T) transformers.get(type).transform(request, parameter);
             }
             type = type.getSuperclass();
         }
 
         return null;
-    }
-
-    public void register(Class type, BiFunction<HttpServletRequest, Parameter, Object> transformation) {
-        transformers.put(type, transformation);
     }
 }

@@ -1,10 +1,12 @@
 package net.example.controller;
 
-import net.example.servlet.GetMapping;
-import net.example.servlet.PostMapping;
+import net.example.resolver.Component;
+import net.example.resolver.GetMapping;
+import net.example.resolver.PostMapping;
 import net.example.view.ModelAndView;
 
-public class ErrorController {
+@Component
+public class ErrorController implements Controller {
 
     @GetMapping("/error")
     @PostMapping("/error")

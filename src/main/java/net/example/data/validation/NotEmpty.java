@@ -1,5 +1,7 @@
 package net.example.data.validation;
 
+import net.example.resolver.Component;
+
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -10,6 +12,7 @@ import java.lang.annotation.Target;
 public @interface NotEmpty {
     String value();
 
+    @Component
     class AnnotationProcessor implements ValidationAnnotationProcessor<Object, NotEmpty> {
         @Override
         public Class<NotEmpty> getSupportedType() {

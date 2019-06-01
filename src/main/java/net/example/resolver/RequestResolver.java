@@ -1,5 +1,6 @@
-package net.example.servlet;
+package net.example.resolver;
 
+import net.example.controller.Controller;
 import net.example.data.validation.Valid;
 import net.example.data.validation.ValidationException;
 import net.example.data.validation.ValidationService;
@@ -19,7 +20,9 @@ import java.util.*;
 import java.util.function.Function;
 
 import static net.example.util.Reflection.getAnnotatedMethods;
+import static net.example.util.Reflection.isAnnotated;
 
+@Component
 public class RequestResolver {
     private static final Logger LOGGER = LogManager.getLogger(RequestResolver.class);
 
@@ -32,22 +35,22 @@ public class RequestResolver {
     private final Map<String, Function<HttpServletRequest, View>> postControllers = new HashMap<>();
     private final Map<String, Function<HttpServletRequest, View>> errorControllers = new HashMap<>();
 
-    public RequestResolver(TransformationService transformationService, ValidationService validationService, Object... controllers) {
+    public RequestResolver(TransformationService transformationService, ValidationService validationService, List<Controller> controllers) {
         this.transformationService = transformationService;
         this.validationService = validationService;
-        for (Object controller : controllers) {
+        for (Controller controller : controllers) {
             getAnnotatedMethods(controller.getClass(), GetMapping.class).forEach((method, mapping) -> getControllers.put(mapping.value(), request -> invokeController(controller, method, request)));
             getAnnotatedMethods(controller.getClass(), PostMapping.class).forEach((method, mapping) -> postControllers.put(mapping.value(), request -> invokeController(controller, method, request)));
             getAnnotatedMethods(controller.getClass(), ExceptionMapping.class).forEach((method, mapping) -> errorControllers.put(getExceptionMapping(controller, mapping.value()), request -> invokeController(controller, method, request)));
         }
     }
 
-    private View invokeController(Object controller, Method method, HttpServletRequest request) {
+    private View invokeController(Controller controller, Method method, HttpServletRequest request) {
         try {
             List<Object> args = new ArrayList<>();
             for (Parameter parameter : method.getParameters()) {
                 Object value = transformationService.transform(request, parameter);
-                if (value != null && Arrays.stream(parameter.getAnnotations()).anyMatch(a -> a.annotationType().isAssignableFrom(Valid.class))) {
+                if (value != null && isAnnotated(parameter, Valid.class)) {
                     List<String> validationErrors = validationService.validate(value);
                     if (!validationErrors.isEmpty()) {
                         throw new ValidationException(validationErrors);
@@ -70,7 +73,7 @@ public class RequestResolver {
         }
     }
 
-    private String getExceptionMapping(Object controller, Class<? extends Throwable> eClass) {
+    private String getExceptionMapping(Controller controller, Class<? extends Throwable> eClass) {
         return String.format("%s:%s", controller, eClass);
     }
 

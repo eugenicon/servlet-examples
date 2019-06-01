@@ -3,19 +3,21 @@ package net.example.controller;
 import net.example.data.model.User;
 import net.example.data.validation.Valid;
 import net.example.data.validation.ValidationException;
+import net.example.resolver.Component;
 import net.example.service.GroupService;
 import net.example.service.ServiceException;
 import net.example.service.UserService;
-import net.example.servlet.ExceptionMapping;
-import net.example.servlet.GetMapping;
-import net.example.servlet.PostMapping;
+import net.example.resolver.ExceptionMapping;
+import net.example.resolver.GetMapping;
+import net.example.resolver.PostMapping;
 import net.example.view.ModelAndView;
 import net.example.view.RedirectView;
 import net.example.view.View;
 
 import java.util.Date;
 
-public class UserController {
+@Component
+public class UserController implements Controller {
     private final UserService userService;
     private final GroupService groupService;
 

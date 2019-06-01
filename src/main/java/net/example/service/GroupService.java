@@ -2,9 +2,11 @@ package net.example.service;
 
 import net.example.data.dao.GroupDao;
 import net.example.data.model.Group;
+import net.example.resolver.Component;
 
 import java.util.List;
 
+@Component
 public class GroupService {
     private GroupDao groupDao;
 
