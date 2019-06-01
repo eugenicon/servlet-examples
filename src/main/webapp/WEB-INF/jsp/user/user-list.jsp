@@ -33,7 +33,7 @@
                     </c:forEach>
                 </table>
 
-                <a href="add-user-bootstrap" class="btn btn-primary floating-button"><fmt:message key="label.add"/></a>
+                <a href="add-user" class="btn btn-primary floating-button"><fmt:message key="label.add"/></a>
             </div>
         </div>
     </jsp:body>

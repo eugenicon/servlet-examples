@@ -11,13 +11,13 @@
             <a href="welcome">welcome</a>
         </p>
         <p>
-            <a href="user-list">user-list</a>
+            <a href="user-list-regular">user-list</a>
         </p>
         <p>
-            <a href="add-user">add-user</a>
+            <a href="add-user-regular">add-user</a>
         </p>
         <p>
-            <a href="user-list-bootstrap">user-list-bootstrap</a>
+            <a href="user-list">user-list-bootstrap</a>
         </p>
 
         <p>

@@ -24,6 +24,6 @@
 
         <%} %>
 </table>
-<a href="add-user">Add</a>
+<a href="add-user-regular">Add</a>
 </body>
 </html>
