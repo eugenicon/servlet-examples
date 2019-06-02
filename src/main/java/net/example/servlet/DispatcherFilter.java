@@ -1,5 +1,7 @@
 package net.example.servlet;
 
+import net.example.util.ServletUtils;
+
 import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
 import javax.servlet.annotation.WebInitParam;
@@ -10,7 +12,7 @@ import java.util.List;
 
 @WebFilter(urlPatterns = "*", initParams = {
         @WebInitParam(name = "dispatcherUrl", value = "/view"),
-        @WebInitParam(name = "permittedUrls", value = "/WEB-INF/,/static/")
+        @WebInitParam(name = "permittedUrls", value = "/WEB-INF/.*,/static/.*")
 })
 public class DispatcherFilter implements Filter {
     private String dispatcherUrl;
@@ -25,10 +27,10 @@ public class DispatcherFilter implements Filter {
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         HttpServletRequest httpRequest = (HttpServletRequest) request;
-        String path = httpRequest.getRequestURI().substring( httpRequest.getContextPath().length());
-        if (permittedUrls.stream().anyMatch(path::startsWith)) {
+        if (ServletUtils.requestUrlMatches(httpRequest, permittedUrls)) {
             chain.doFilter(request, response);
         } else {
+            String path = ServletUtils.getRequestUrl(httpRequest);
             String refererUrl = getRefererUrl(httpRequest);
             request.setAttribute("refererUrl", refererUrl);
             request.getRequestDispatcher(dispatcherUrl + path).forward(request, response);

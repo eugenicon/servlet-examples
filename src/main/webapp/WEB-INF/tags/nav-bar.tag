@@ -1,40 +1,21 @@
 <%@taglib prefix="t" tagdir="/WEB-INF/tags" %>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
-<%@tag description="Application navigation bar" pageEncoding="UTF-8" %>
-
-<nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
-    <a class="navbar-brand" href="#">My App</a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarsExampleDefault">
-        <ul class="navbar-nav mr-auto">
-            <t:nav-item url="welcome" label="home"/>
+<div class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 navbar navbar-expand-md navbar-dark bg-dark fixed-top">
+    <h5 class="my-0 mr-md-auto font-weight-normal navbar-brand clickable" onclick="navigate('welcome')">My App</h5>
+    <ul class="navbar-nav my-2 my-md-0 mr-md-3">
+        <c:if test="${auth.role eq 'USER' or auth.role eq 'ADMIN'}">
             <t:nav-item url="group-list" label="groups"/>
+        </c:if>
+        <c:if test="${auth.role eq 'ADMIN'}">
             <t:nav-item url="user/list" label="users"/>
-
-            <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">${sessionScope.lang}</a>
-                <div class="dropdown-menu" aria-labelledby="dropdown01">
-                    <div class="dropdown-item" >
-                        <form role="form" method="post" action="set-language" style="margin-bottom: 0px;">
-                            <input type="hidden" name="language" value="en">
-                            <button class="btn btn-flat" type="submit">EN</button>
-                        </form>
-                    </div>
-                    <div class="dropdown-item" >
-                        <form role="form" method="post" action="set-language" style="margin-bottom: 0px;">
-                            <input type="hidden" name="language" value="ru">
-                            <button class="btn btn-flat" type="submit">RU</button>
-                        </form>
-                    </div>
-                </div>
-            </li>
-        </ul>
-        <form class="form-inline my-2 my-lg-0">
-            <input class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search">
-            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-        </form>
-    </div>
-</nav>
+        </c:if>
+        <t:nav-language/>
+    </ul>
+    <c:if test="${auth.role eq 'UNKNOWN'}">
+        <a class="btn btn-outline-primary" href="login">Sign in</a>
+    </c:if>
+    <c:if test="${auth.role != 'UNKNOWN'}">
+        <a class="btn btn-outline-primary" href="logout">Sign out</a>
+    </c:if>
+</div>

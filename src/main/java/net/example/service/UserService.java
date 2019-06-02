@@ -6,6 +6,7 @@ import net.example.data.model.User;
 import net.example.resolver.Component;
 
 import java.util.List;
+import java.util.Optional;
 
 @Component
 public class UserService {
@@ -33,5 +34,9 @@ public class UserService {
 
     public User getById(Integer id) throws ServiceException {
         return userDao.getById(id).orElseThrow(() -> new ServiceException("Could not find user with id " + id));
+    }
+
+    public Optional<User> findMatchingCredentials(String userName, String password) {
+        return userDao.findByName(userName).map(user -> password.equalsIgnoreCase(user.getPassword()) ? user : null);
     }
 }

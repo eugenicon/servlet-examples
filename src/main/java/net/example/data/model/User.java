@@ -9,14 +9,11 @@ public class User {
     private String name;
     private int age;
     private Group group;
+    private String password;
+    private Role role;
 
     public User() {
 
-    }
-
-    public User(String name, int age) {
-        this.name = name;
-        this.age = age;
     }
 
     @ValidRegex(regex = ".{4,}", message = "valid-name-length")
@@ -52,5 +49,21 @@ public class User {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public Role getRole() {
+        return role;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
     }
 }
