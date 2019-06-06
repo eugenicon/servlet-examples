@@ -33,7 +33,9 @@
                             <td class="tr-table-options">
                                 <div class="table-options">
                                     <i class="fas fa-pen" onclick="navigate('user/edit/${item.getId()}')"></i>
-                                    <i class="fas fa-times" onclick="post('user/delete/${item.getId()}')"></i>
+                                    <t:confirm-button onConfirm="post('user/delete/${item.getId()}')">
+                                        <i class="fas fa-times"></i>
+                                    </t:confirm-button>
                                 </div>
                             </td>
                         </tr>
@@ -43,5 +45,7 @@
                 <a href="user/add" class="btn btn-primary floating-button"><fmt:message key="label.add"/></a>
             </div>
         </div>
+
+        <t:confirm-modal/>
     </jsp:body>
 </t:generic-page>

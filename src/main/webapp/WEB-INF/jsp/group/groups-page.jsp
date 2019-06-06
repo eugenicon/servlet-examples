@@ -29,7 +29,9 @@
                             <td class="tr-table-options">
                                 <div class="table-options">
                                     <i class="fas fa-pen" onclick="navigate('group/edit/${item.getId()}')"></i>
-                                    <i class="fas fa-times" onclick="post('group/delete/${item.getId()}')"></i>
+                                    <t:confirm-button onConfirm="post('group/delete/${item.getId()}')">
+                                        <i class="fas fa-times"></i>
+                                    </t:confirm-button>
                                 </div>
                             </td>
                         </tr>
@@ -39,5 +41,7 @@
                 <a href="group/add" class="btn btn-primary floating-button"><fmt:message key="label.add"/></a>
             </div>
         </div>
+
+        <t:confirm-modal/>
     </jsp:body>
 </t:generic-page>

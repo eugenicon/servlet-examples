@@ -36,6 +36,10 @@
     cursor: pointer
 }
 
+.confirm {
+    display: inline;
+}
+
 .tr-table-options {
     text-align: right;
     width: 60px;
