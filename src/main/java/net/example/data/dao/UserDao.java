@@ -46,13 +46,24 @@ public class UserDao {
     }
 
     public List<User> getAll() {
-        return dataSource.query("select * from users").list(this::convert);
+        return dataSource.query("select * from users order by id").list(this::convert);
     }
 
-    public void save(User user) {
+    public void add(User user) {
         dataSource.query("insert into users (name, age, group_id, role, password) values(?, ?, ?, ?, ?)")
                 .prepare(ps -> prepare(ps, user))
                 .execute(rs -> user.setId(rs.getInt(1)));
+    }
+
+    public void update(User user) {
+        dataSource.query("update users set name = ?, age = ?, group_id = ? where id = ?")
+                .prepare(ps -> {
+                    ps.setString(1, user.getName());
+                    ps.setInt(2, user.getAge());
+                    ps.setInt(3, user.getGroup().getId());
+                    ps.setInt(4, user.getId());
+                })
+                .execute();
     }
 
     public List<User> getUsersByGroup(Group group) {

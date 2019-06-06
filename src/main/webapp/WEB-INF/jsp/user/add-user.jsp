@@ -14,7 +14,8 @@
         <t:exception/>
         <div class="row">
             <div class="col-sm-12">
-                <form method="post" action="add-user" class="form" role="form">
+                <form method="post" action="user/save" class="form" role="form">
+                    <input type="hidden" id="id" name="id" value="${user.getId()}">
                     <div class="form-group">
                         <fmt:message key="label.enter-user-name" var="enterUserName" />
                         <label for="name"><fmt:message key="label.name"/>:</label>

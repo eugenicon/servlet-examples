@@ -3,7 +3,6 @@ package net.example.tranforemer;
 import net.example.resolver.Component;
 
 import javax.servlet.http.HttpServletRequest;
-import java.lang.reflect.Parameter;
 
 @Component
 public class IntegerTransformer implements Transformer<Integer> {
@@ -14,9 +13,9 @@ public class IntegerTransformer implements Transformer<Integer> {
     }
 
     @Override
-    public Integer transform(HttpServletRequest r, Parameter p) {
+    public Integer transform(HttpServletRequest r, String p) {
         String s = String.valueOf(genericTransformer.transform(r, p));
-        return s.matches("\\d+") ? Integer.parseInt(s) : null;
+        return s.matches("\\d+") ? Integer.parseInt(s) : 0;
     }
 
     @Override

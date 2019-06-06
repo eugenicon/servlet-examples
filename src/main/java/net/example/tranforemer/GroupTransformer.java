@@ -4,14 +4,19 @@ import net.example.data.model.Group;
 import net.example.resolver.Component;
 
 import javax.servlet.http.HttpServletRequest;
-import java.lang.reflect.Parameter;
 
 @Component
 public class GroupTransformer implements Transformer<Group> {
+    private IntegerTransformer integerTransformer;
+
+    public GroupTransformer(IntegerTransformer integerTransformer) {
+        this.integerTransformer = integerTransformer;
+    }
 
     @Override
-    public Group transform(HttpServletRequest request, Parameter parameter) {
+    public Group transform(HttpServletRequest request, String parameter) {
         Group group = new Group();
+        group.setId(integerTransformer.transform(request, "id"));
         group.setName(request.getParameter("name"));
         return group;
     }

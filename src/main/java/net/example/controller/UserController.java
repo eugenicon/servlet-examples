@@ -53,16 +53,20 @@ public class UserController implements Controller {
         return modelAndView;
     }
 
-    @GetMapping("/user/{id}/info")
-    public View showViewUserPage(Integer id) throws ServiceException  {
-        ModelAndView modelAndView = new ModelAndView("user/view-user.jsp");
+    @GetMapping("/user/edit/{id}")
+    public View showEditUserPage(Integer id) throws ServiceException  {
+        View modelAndView = showAddUserPageBootstrap();
         modelAndView.addParameter("user", userService.getById(id));
         return modelAndView;
     }
 
-    @PostMapping("/add-user")
-    public View addUser(@Valid User user) throws ServiceException {
-        userService.addUser(user);
+    @PostMapping("/user/save")
+    public View saveUser(@Valid User user) throws ServiceException {
+        if (user.getId() == 0) {
+            userService.addUser(user);
+        } else {
+            userService.updateUser(user);
+        }
         return new RedirectView(new ModelAndView("user/list"));
     }
 

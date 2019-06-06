@@ -4,10 +4,10 @@ import net.example.data.model.Group;
 import net.example.data.validation.Valid;
 import net.example.data.validation.ValidationException;
 import net.example.resolver.Component;
-import net.example.service.GroupService;
 import net.example.resolver.ExceptionMapping;
 import net.example.resolver.GetMapping;
 import net.example.resolver.PostMapping;
+import net.example.service.GroupService;
 import net.example.view.ModelAndView;
 import net.example.view.RedirectView;
 import net.example.view.View;
@@ -32,10 +32,21 @@ public class GroupController implements Controller {
         return new ModelAndView("group/add-group.jsp");
     }
 
-    @PostMapping("/group/add")
-    public View addGroup(@Valid Group group) {
-        groupService.save(group);
+    @PostMapping("/group/save")
+    public View saveGroup(@Valid Group group) {
+        if (group.getId() == 0) {
+            groupService.add(group);
+        } else {
+            groupService.update(group);
+        }
         return new RedirectView(new ModelAndView("group/list"));
+    }
+
+    @GetMapping("/group/edit/{id}")
+    public View editGroup(Integer id) {
+        View modelAndView = addGroup();
+        modelAndView.addParameter("group", groupService.getById(id));
+        return modelAndView;
     }
 
     @PostMapping("/group/delete/{id}")

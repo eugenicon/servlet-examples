@@ -6,31 +6,25 @@ import net.example.resolver.Component;
 import net.example.service.GroupService;
 
 import javax.servlet.http.HttpServletRequest;
-import java.lang.reflect.Parameter;
 
 @Component
 public class UserTransformer implements Transformer<User> {
     private GroupService groupService;
+    private IntegerTransformer integerTransformer;
 
-    public UserTransformer(GroupService groupService) {
+    public UserTransformer(GroupService groupService, IntegerTransformer integerTransformer) {
         this.groupService = groupService;
+        this.integerTransformer = integerTransformer;
     }
 
     @Override
-    public User transform(HttpServletRequest request, Parameter parameter) {
+    public User transform(HttpServletRequest request, String parameter) {
         User user = new User();
-        String age = request.getParameter("age");
-        if (age != null && age.matches("\\d+")) {
-            user.setAge(Integer.parseInt(age));
-        }
+        user.setId(integerTransformer.transform(request, "id"));
+        user.setAge(integerTransformer.transform(request, "age"));
         user.setName(request.getParameter("name"));
-        try {
-            int groupId = Integer.parseInt(request.getParameter("group_id"));
-            Group group = groupService.getById(groupId);
-            user.setGroup(group);
-        } catch (Exception e) {
-            // do nothing
-        }
+        Group group = groupService.getById(integerTransformer.transform(request, "group_id"));
+        user.setGroup(group);
         return user;
     }
 

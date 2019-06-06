@@ -4,7 +4,7 @@ import net.example.data.dto.UserLoginDto;
 import net.example.data.model.Role;
 import net.example.data.model.User;
 import net.example.resolver.Component;
-import net.example.tranforemer.UserLoginDtoTransformer;
+import net.example.tranforemer.TransformationService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -23,11 +23,11 @@ public class AuthenticationService {
     private static final String ALL_AUTH = "usersAuth";
     private static final String AUTH = "auth";
 
-    private final UserLoginDtoTransformer userTransformer;
+    private final TransformationService transformationService;
     private final UserService userService;
 
-    public AuthenticationService(UserLoginDtoTransformer userTransformer, UserService userService) {
-        this.userTransformer = userTransformer;
+    public AuthenticationService(TransformationService transformationService, UserService userService) {
+        this.transformationService = transformationService;
         this.userService = userService;
     }
 
@@ -81,7 +81,7 @@ public class AuthenticationService {
     }
 
     public void startUserSession(HttpServletRequest httpRequest) {
-        UserLoginDto userDto = userTransformer.transform(httpRequest, null);
+        UserLoginDto userDto = transformationService.transform(httpRequest, UserLoginDto.class);
         AuthenticatedUser auth = new AuthenticatedUser(userDto.getUserName(), Role.UNKNOWN);
         getAuthentications(httpRequest.getServletContext()).put(httpRequest.getSession().getId(), auth);
         httpRequest.getSession().setAttribute(AUTH, auth);

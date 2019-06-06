@@ -23,10 +23,10 @@ public class GroupDao {
     }
 
     public List<Group> getAll() {
-        return dataSource.query("select * from groups").list(this::convert);
+        return dataSource.query("select * from groups order by id").list(this::convert);
     }
 
-    public void save(Group group) {
+    public void add(Group group) {
         dataSource.query("insert into groups (name) values(?)")
                 .prepare(ps -> ps.setString(1, group.getName()))
                 .execute(rs -> group.setId(rs.getInt(1)));
@@ -44,6 +44,15 @@ public class GroupDao {
                 .prepare(ps -> ps.setInt(1, groupId))
                 .and("delete from groups where id = ?")
                 .prepare(ps -> ps.setInt(1, groupId))
+                .execute();
+    }
+
+    public void update(Group group) {
+        dataSource.query("update groups set name = ? where id = ?")
+                .prepare(ps -> {
+                    ps.setString(1, group.getName());
+                    ps.setInt(2, group.getId());
+                })
                 .execute();
     }
 }

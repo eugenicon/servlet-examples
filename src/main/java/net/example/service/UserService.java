@@ -22,7 +22,7 @@ public class UserService {
 
     public void addUser(User user) throws ServiceException {
         try {
-            userDao.save(user);
+            userDao.add(user);
         } catch (Exception e) {
             throw new ServiceException("Could not save user", e);
         }
@@ -42,5 +42,9 @@ public class UserService {
 
     public void delete(Integer id) {
         userDao.delete(id);
+    }
+
+    public void updateUser(User user) {
+        userDao.update(user);
     }
 }

@@ -3,14 +3,13 @@ package net.example.tranforemer;
 import net.example.resolver.Component;
 
 import javax.servlet.http.HttpServletRequest;
-import java.lang.reflect.Parameter;
 
 @Component
 public class GenericTransformer implements Transformer<Object> {
 
     @Override
-    public Object transform(HttpServletRequest r, Parameter p) {
-        return r.getAttribute(p.getName()) == null ? r.getParameter(p.getName()) : r.getAttribute(p.getName());
+    public Object transform(HttpServletRequest r, String p) {
+        return r.getAttribute(p) == null ? r.getParameter(p) : r.getAttribute(p);
     }
 
     @Override

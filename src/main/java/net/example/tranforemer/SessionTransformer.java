@@ -4,13 +4,12 @@ import net.example.resolver.Component;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.lang.reflect.Parameter;
 
 @Component
 public class SessionTransformer implements Transformer<HttpSession> {
 
     @Override
-    public HttpSession transform(HttpServletRequest r, Parameter p) {
+    public HttpSession transform(HttpServletRequest r, String p) {
         return r.getSession();
     }
 

@@ -51,7 +51,7 @@ public class RequestResolver {
         try {
             List<Object> args = new ArrayList<>();
             for (Parameter parameter : method.getParameters()) {
-                Object value = transformationService.transform(request, parameter);
+                Object value = transformationService.transform(request, parameter.getType(), parameter.getName());
                 if (value != null && isAnnotated(parameter, Valid.class)) {
                     List<String> validationErrors = validationService.validate(value);
                     if (!validationErrors.isEmpty()) {
