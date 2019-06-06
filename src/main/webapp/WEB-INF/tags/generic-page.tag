@@ -10,7 +10,6 @@
 <html>
 <head>
     <base href="${fn:substring(url, 0, fn:length(url) - fn:length(pageContext.request.requestURI))}${pageContext.request.contextPath}/"/>
-    <script>const base = document.getElementsByTagName("base")[0].href;</script>
 
     <link rel="stylesheet" href="static/css/styles.css">
     <script src="static/js/scripts.js"></script>

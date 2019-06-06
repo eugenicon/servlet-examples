@@ -1,3 +1,5 @@
+const base = (document.querySelector('base') || {}).href;
+
 function navigate(url) {
     window.location.href=url;
 }

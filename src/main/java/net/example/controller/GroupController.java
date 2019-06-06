@@ -20,33 +20,33 @@ public class GroupController implements Controller {
         this.groupService = groupService;
     }
 
-    @GetMapping("/group-list")
+    @GetMapping("/group/list")
     public ModelAndView getAll() {
         ModelAndView view = new ModelAndView("group/groups-page.jsp");
         view.addParameter("listOfData", groupService.getAllGroups());
         return view;
     }
 
-    @GetMapping("/add-group")
+    @GetMapping("/group/add")
     public ModelAndView addGroup() {
         return new ModelAndView("group/add-group.jsp");
     }
 
-    @PostMapping("/add-group")
+    @PostMapping("/group/add")
     public View addGroup(@Valid Group group) {
         groupService.save(group);
-        return new RedirectView(new ModelAndView("group-list"));
+        return new RedirectView(new ModelAndView("group/list"));
     }
 
     @PostMapping("/group/delete/{id}")
     public View deleteGroup(Integer id) {
         groupService.delete(id);
-        return new RedirectView(new ModelAndView("group-list"));
+        return new RedirectView(new ModelAndView("group/list"));
     }
 
     @ExceptionMapping(ValidationException.class)
     public View onValidationException(ValidationException error, Group group) {
-        View view = new ModelAndView("add-group");
+        View view = new ModelAndView("group/add");
         view.addParameter("error", String.join("\n", error.getErrors()));
         view.addParameter("group", group);
         return new RedirectView(view);

@@ -78,4 +78,10 @@ public class UserDao {
                 .prepare(users, this::prepare)
                 .execute();
     }
+
+    public void delete(Integer id) {
+        dataSource.query("delete from users where id = ?")
+                .prepare(ps -> ps.setInt(1, id))
+                .execute();
+    }
 }

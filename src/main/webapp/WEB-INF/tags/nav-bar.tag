@@ -5,7 +5,7 @@
     <h5 class="my-0 mr-md-auto font-weight-normal navbar-brand clickable" onclick="navigate('welcome')">My App</h5>
     <ul class="navbar-nav my-2 my-md-0 mr-md-3">
         <c:if test="${auth.role eq 'USER' or auth.role eq 'ADMIN'}">
-            <t:nav-item url="group-list" label="groups"/>
+            <t:nav-item url="group/list" label="groups"/>
         </c:if>
         <c:if test="${auth.role eq 'ADMIN'}">
             <t:nav-item url="user/list" label="users"/>

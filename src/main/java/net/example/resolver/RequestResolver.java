@@ -100,7 +100,7 @@ public class RequestResolver {
     private void dispatch(View view, HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         if (view instanceof RedirectView) {
             request.getSession().setAttribute(VIEW_ATTRIBUTE, view.getView());
-            response.sendRedirect(view.getPageUrl());
+            response.sendRedirect(request.getContextPath() + "/" + view.getPageUrl());
         } else if (view != null){
             String pageUrl = (view.getPageUrl().endsWith(".jsp") ? "WEB-INF/jsp/" : "") + view.getPageUrl();
             view.getParams().forEach(request::setAttribute);

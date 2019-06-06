@@ -21,11 +21,11 @@
         </p>
 
         <p>
-            <a href="group-list">group-list</a>
+            <a href="group/list">group-list</a>
         </p>
 
         <p>
-            <a href="add-group">add-group</a>
+            <a href="group/add">add-group</a>
         </p>
 
         <p>

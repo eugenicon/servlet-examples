@@ -36,7 +36,7 @@
                     </c:forEach>
                 </table>
 
-                <a href="add-group" class="btn btn-primary floating-button"><fmt:message key="label.add"/></a>
+                <a href="group/add" class="btn btn-primary floating-button"><fmt:message key="label.add"/></a>
             </div>
         </div>
     </jsp:body>

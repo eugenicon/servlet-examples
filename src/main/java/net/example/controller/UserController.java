@@ -66,6 +66,12 @@ public class UserController implements Controller {
         return new RedirectView(new ModelAndView("user/list"));
     }
 
+    @PostMapping("/user/delete/{id}")
+    public View deleteUser(Integer id) {
+        userService.delete(id);
+        return new RedirectView(new ModelAndView("user/list"));
+    }
+
     @ExceptionMapping(ServiceException.class)
     public View showUserAddErrors(ServiceException error) {
         return showUserAddErrors(error.getCause() == null ? error.getMessage() : error.getCause().getMessage(), null);

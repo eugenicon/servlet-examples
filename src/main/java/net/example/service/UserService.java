@@ -39,4 +39,8 @@ public class UserService {
     public Optional<User> findMatchingCredentials(String userName, String password) {
         return userDao.findByName(userName).map(user -> password.equalsIgnoreCase(user.getPassword()) ? user : null);
     }
+
+    public void delete(Integer id) {
+        userDao.delete(id);
+    }
 }

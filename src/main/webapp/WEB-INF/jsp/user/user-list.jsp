@@ -20,15 +20,22 @@
                         <th><fmt:message key="label.name"/></th>
                         <th><fmt:message key="label.age"/></th>
                         <th><fmt:message key="label.group"/></th>
+                        <th></th>
                     </tr>
                     </thead>
 
                     <c:forEach var="item" items="${listOfData}">
-                        <tr class="clickable" onclick="navigate('user/${item.getId()}/info')">
+                        <tr>
                             <td>${item.getId()}</td>
                             <td>${item.getName()}</td>
                             <td>${item.getAge()}</td>
                             <td>${item.getGroup().getName()}</td>
+                            <td class="tr-table-options">
+                                <div class="table-options">
+                                    <i class="fas fa-pen" onclick="navigate('user/edit/${item.getId()}')"></i>
+                                    <i class="fas fa-times" onclick="post('user/delete/${item.getId()}')"></i>
+                                </div>
+                            </td>
                         </tr>
                     </c:forEach>
                 </table>
