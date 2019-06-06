@@ -6,7 +6,7 @@
 <t:generic-page title="Login" showNavBar="false">
     <jsp:body>
         <div class="row text-center justify-content-center">
-            <form class="form-group col-4" method="post" action="login">
+            <form class="form-group col-4" method="post" action="">
                 <img class="mb-4" src="static/img/accountlogin-icon.png" alt="" width="72" height="72">
                 <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
 

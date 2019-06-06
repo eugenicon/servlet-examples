@@ -8,6 +8,7 @@ import net.example.resolver.Component;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Types;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -40,7 +41,11 @@ public class UserDao {
     private void prepare(PreparedStatement ps, User user) throws SQLException {
         ps.setString(1, user.getName());
         ps.setInt(2, user.getAge());
-        ps.setInt(3, user.getGroup() != null ? user.getGroup().getId() : 0);
+        if (user.getGroup() != null) {
+            ps.setInt(3, user.getGroup().getId());
+        } else {
+            ps.setNull(3, Types.INTEGER);
+        }
         ps.setString(4, user.getRole() != null ? user.getRole().name() : Role.USER.name());
         ps.setString(5, user.getPassword());
     }

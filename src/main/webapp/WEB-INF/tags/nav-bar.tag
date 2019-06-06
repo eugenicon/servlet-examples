@@ -12,10 +12,16 @@
         </c:if>
         <t:nav-language/>
     </ul>
-    <c:if test="${auth.role eq 'UNKNOWN'}">
-        <a class="btn btn-outline-primary" href="login">Sign in</a>
-    </c:if>
-    <c:if test="${auth.role != 'UNKNOWN'}">
-        <a class="btn btn-outline-primary" href="logout">Sign out</a>
-    </c:if>
+
+    <div class="btn-group" >
+        <c:if test="${auth.role eq 'UNKNOWN'}">
+            <a class="btn btn-outline-secondary" href="register">Sign up</a>
+        </c:if>
+        <c:if test="${auth.role eq 'UNKNOWN'}">
+            <a class="btn btn-outline-primary" href="login">Sign in</a>
+        </c:if>
+        <c:if test="${auth.role != 'UNKNOWN'}">
+            <a class="btn btn-outline-primary" href="logout">Sign out</a>
+        </c:if>
+    </div>
 </div>

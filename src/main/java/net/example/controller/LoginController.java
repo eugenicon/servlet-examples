@@ -24,7 +24,7 @@ public class LoginController implements Controller {
 
     @GetMapping("/login")
     public View login() {
-        return new ModelAndView("login.jsp");
+        return new ModelAndView("login/login.jsp");
     }
 
     @PostMapping("/login")

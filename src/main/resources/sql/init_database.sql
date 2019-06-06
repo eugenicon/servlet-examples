@@ -9,7 +9,7 @@ create table if not exists users (
                                    name varchar (250) NOT NULL,
                                    password varchar (250) NOT NULL,
                                    role varchar (250) NOT NULL,
-                                   age int NOT NULL,
+                                   age int,
                                    group_id int,
                                    PRIMARY KEY (id),
                                    CONSTRAINT users_group_id_fkey FOREIGN KEY (group_id)
