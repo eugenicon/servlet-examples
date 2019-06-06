@@ -35,3 +35,21 @@
 .clickable {
     cursor: pointer
 }
+
+.tr-table-options {
+    text-align: right;
+    width: 60px;
+    padding-right: 10px;
+}
+
+tr .table-options {
+    display: none;
+}
+
+tr:hover .table-options {
+    display: inline;
+}
+
+.table-options i {
+    cursor: pointer;
+}

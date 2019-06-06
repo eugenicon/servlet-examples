@@ -18,6 +18,7 @@
                     <tr>
                         <th>Id</th>
                         <th><fmt:message key="label.name"/></th>
+                        <th></th>
                     </tr>
                     </thead>
 
@@ -25,6 +26,12 @@
                         <tr>
                             <td>${item.getId()}</td>
                             <td>${item.getName()}</td>
+                            <td class="tr-table-options">
+                                <div class="table-options">
+                                    <i class="fas fa-pen" onclick="navigate('group/edit/${item.getId()}')"></i>
+                                    <i class="fas fa-times" onclick="post('group/delete/${item.getId()}')"></i>
+                                </div>
+                            </td>
                         </tr>
                     </c:forEach>
                 </table>

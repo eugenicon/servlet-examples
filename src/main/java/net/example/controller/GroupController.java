@@ -22,19 +22,25 @@ public class GroupController implements Controller {
 
     @GetMapping("/group-list")
     public ModelAndView getAll() {
-        ModelAndView view = new ModelAndView("groups-page.jsp");
+        ModelAndView view = new ModelAndView("group/groups-page.jsp");
         view.addParameter("listOfData", groupService.getAllGroups());
         return view;
     }
 
     @GetMapping("/add-group")
     public ModelAndView addGroup() {
-        return new ModelAndView("add-group.jsp");
+        return new ModelAndView("group/add-group.jsp");
     }
 
     @PostMapping("/add-group")
-    public View addUser(@Valid Group group) {
+    public View addGroup(@Valid Group group) {
         groupService.save(group);
+        return new RedirectView(new ModelAndView("group-list"));
+    }
+
+    @PostMapping("/group/delete/{id}")
+    public View deleteGroup(Integer id) {
+        groupService.delete(id);
         return new RedirectView(new ModelAndView("group-list"));
     }
 

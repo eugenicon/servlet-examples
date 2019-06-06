@@ -2,28 +2,24 @@ package net.example.data.dao;
 
 import net.example.resolver.Component;
 import net.example.util.ResourceReader;
+import net.example.util.SafeBiConsumer;
+import net.example.util.SafeConsumer;
+import net.example.util.SafeFunction;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.Properties;
-import java.util.function.Consumer;
-import java.util.function.Function;
+import java.util.*;
 
 @Component
 public class DataSource {
-
+    private static final Logger LOGGER = LogManager.getLogger(DataSource.class);
     private final String userName;
     private final String password;
     private final String url;
 
-    public DataSource(Properties properties) {
-       try {
-            Class.forName(properties.getProperty("jdbc.driver"));
-        } catch (ClassNotFoundException e) {
-            throw new RuntimeException(e);
-        }
+    public DataSource(Properties properties) throws ClassNotFoundException {
+        Class.forName(properties.getProperty("jdbc.driver"));
 
         url = properties.getProperty("jdbc.url");
         userName = properties.getProperty("jdbc.user");
@@ -32,10 +28,10 @@ public class DataSource {
         try {
             String initBdScript = ResourceReader.getResourceAsString(properties.getProperty("jdbc.init-script"));
             if (!initBdScript.isEmpty()) {
-                executeUpdate(initBdScript, ps -> {}, rs -> {});
+                query(initBdScript).execute();
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            LOGGER.error(e);
         }
     }
 
@@ -43,73 +39,119 @@ public class DataSource {
         return DriverManager.getConnection(url, userName, password);
     }
 
-    public <T> List<T> selectQuery(String sql, SqlFunction<T> converter) {
-        return selectQuery(sql, converter, ps -> {});
-    }
-
-    public <T> List<T> selectQuery(String sql, SqlFunction<T> converter, SqlConsumer<PreparedStatement> paramSetter) {
+    private <T> List<T> executeQuery(Connection connection, QueryData queryData) throws SQLException {
+        boolean useBatch = queryData.data.size() > 1;
         List<T> list = new ArrayList<>();
-        try (
-                Connection connection = getConnection();
-                PreparedStatement ps = connection.prepareStatement(sql);
-        ) {
-            paramSetter.accept(ps);
-            try (ResultSet rs = ps.executeQuery();) {
-                while (rs.next()) {
-                    list.add(converter.apply(rs));
+        try (PreparedStatement ps = connection.prepareStatement(queryData.query, Statement.RETURN_GENERATED_KEYS)) {
+            if (queryData.parameters != null) {
+                for (Object dataObject : queryData.data) {
+                    queryData.parameters.accept(ps, dataObject);
+                    if (useBatch) {
+                        ps.addBatch();
+                    }
                 }
             }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
+            LOGGER.debug(ps);
+            if (queryData.query.toUpperCase().startsWith("SELECT")) {
+                try (ResultSet rs = ps.executeQuery()) {
+                    while (rs.next()) {
+                        list.add((T) queryData.converter.apply(rs));
+                    }
+                }
+            } else {
+                if (useBatch) {
+                    ps.executeBatch();
+                } else {
+                    ps.executeUpdate();
+                }
+                if (queryData.resultProcessor != null) {
+                    try (ResultSet rs = ps.getGeneratedKeys()) {
+                        while (rs.next()) {
+                            queryData.resultProcessor.accept(rs);
+                        }
+                    }
+                }
+            }
         }
-
         return list;
     }
 
-    public void executeUpdate(String sql, SqlConsumer<PreparedStatement> paramSetter, SqlConsumer<ResultSet> resultProcessor) {
-        try (
-                Connection connection = getConnection();
-                PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-        ) {
-            paramSetter.accept(ps);
-            ps.executeUpdate();
-            try (ResultSet rs = ps.getGeneratedKeys();) {
-                while (rs.next()) {
-                    resultProcessor.accept(rs);
+    public QueryBuilder query(String sql) {
+        return new QueryBuilder().and(sql);
+    }
+
+    private class QueryData {
+        private List<?> data = Collections.singletonList(null);
+        private SafeFunction<ResultSet, ?> converter;
+        private String query;
+        private SafeBiConsumer<PreparedStatement, Object> parameters;
+        private SafeConsumer<ResultSet> resultProcessor;
+    }
+
+    public class QueryBuilder {
+        private List<QueryData> queries = new ArrayList<>();
+
+        private <T> List<T> executeAll() {
+            List<T> list = new ArrayList<>();
+            boolean useTransactions = queries.size() > 1;
+            try (Connection connection = getConnection()) {
+                if (useTransactions) {
+                    LOGGER.debug("begin transaction");
+                    connection.setTransactionIsolation(Connection.TRANSACTION_REPEATABLE_READ);
+                    connection.setAutoCommit(false);
                 }
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    public <T> Optional<T> selectFirst(String sql, SqlFunction<T> converter, SqlConsumer<PreparedStatement> paramSetter) {
-        return selectQuery(sql, converter, paramSetter).stream().findFirst();
-    }
-
-    interface SqlFunction<T> extends Function<ResultSet, T> {
-        @Override
-        default T apply(ResultSet resultSet) {
-            try {
-                return safeApply(resultSet);
+                for (QueryData queryData : queries) {
+                    list.addAll(executeQuery(connection, queryData));
+                }
+                if (useTransactions) {
+                    LOGGER.debug("commit transaction");
+                    connection.commit();
+                }
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
+            return list;
         }
 
-        T safeApply(ResultSet resultSet) throws SQLException;
-    }
-
-    interface SqlConsumer<T> extends Consumer<T> {
-        @Override
-        default void accept(T preparedStatement) {
-            try {
-                safeApply(preparedStatement);
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
+        public QueryBuilder and(String sql) {
+            QueryData queryData = new QueryData();
+            queryData.query = sql;
+            queries.add(queryData);
+            return this;
         }
 
-        void safeApply(T preparedStatement) throws SQLException;
+        public <T> Optional<T> first(SafeFunction<ResultSet, T> converter) {
+            return list(converter).stream().findFirst();
+        }
+
+        public <T> List<T> list(SafeFunction<ResultSet, T> converter) {
+            getLastQuery().converter = converter;
+            return executeAll();
+        }
+
+        public <T> QueryBuilder prepare(SafeConsumer<PreparedStatement> prepared) {
+            return prepare(Collections.singletonList(null), (PreparedStatement ps, T data) -> prepared.accept(ps));
+        }
+
+        public <T> QueryBuilder prepare(List<T> data, SafeBiConsumer<PreparedStatement, T> prepared) {
+            QueryData query = getLastQuery();
+            query.data = data;
+            query.parameters = (SafeBiConsumer<PreparedStatement, Object>) prepared;
+            return this;
+        }
+
+        public void execute() {
+            executeAll();
+        }
+
+        public void execute(SafeConsumer<ResultSet> processor) {
+            getLastQuery().resultProcessor = processor;
+            execute();
+        }
+
+        private QueryData getLastQuery() {
+            return this.queries.get(this.queries.size() - 1);
+        }
     }
+
 }

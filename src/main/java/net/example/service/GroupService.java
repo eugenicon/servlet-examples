@@ -25,4 +25,8 @@ public class GroupService {
     public void save(Group group) {
         groupDao.save(group);
     }
+
+    public void delete(Integer id) {
+        groupDao.delete(id);
+    }
 }

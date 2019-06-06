@@ -14,10 +14,11 @@
 
     <link rel="stylesheet" href="static/css/styles.css">
     <script src="static/js/scripts.js"></script>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <script src="static/lib/jquery/3.4.1/jquery.min.js"></script>
+    <script src="static/lib/popper.js/1.14.7/popper.min.js"></script>
+    <script src="static/lib/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="static/lib/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="static/lib/font-awesome/5.9.0/css/all.css">
     <title id="title">${title}</title>
 </head>
 <body>
