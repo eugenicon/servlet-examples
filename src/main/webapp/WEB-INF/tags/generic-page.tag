@@ -11,13 +11,15 @@
 <head>
     <base href="${fn:substring(url, 0, fn:length(url) - fn:length(pageContext.request.requestURI))}${pageContext.request.contextPath}/"/>
 
-    <link rel="stylesheet" href="static/css/styles.css">
-    <script src="static/js/scripts.js"></script>
     <script src="static/lib/jquery/3.4.1/jquery.min.js"></script>
     <script src="static/lib/popper.js/1.14.7/popper.min.js"></script>
     <script src="static/lib/bootstrap/4.3.1/js/bootstrap.min.js"></script>
     <link rel="stylesheet" href="static/lib/bootstrap/4.3.1/css/bootstrap.min.css">
     <link rel="stylesheet" href="static/lib/font-awesome/5.9.0/css/all.css">
+
+    <link rel="stylesheet" href="static/css/styles.css">
+    <script src="static/js/scripts.js"></script>
+
     <title id="title">${title}</title>
 </head>
 <body>

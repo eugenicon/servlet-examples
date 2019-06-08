@@ -61,12 +61,8 @@ public class UserController implements Controller {
     }
 
     @PostMapping("/user/save")
-    public View saveUser(@Valid User user) throws ServiceException {
-        if (user.getId() == 0) {
-            userService.addUser(user);
-        } else {
-            userService.updateUser(user);
-        }
+    public View saveUser(@Valid User user) {
+        userService.save(user);
         return new RedirectView(new ModelAndView("user/list"));
     }
 

@@ -11,6 +11,9 @@
             <a href="welcome">welcome</a>
         </p>
         <p>
+            <a href="files/list">files/list</a>
+        </p>
+        <p>
             <a href="user-list-regular">user-list</a>
         </p>
         <p>

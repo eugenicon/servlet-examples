@@ -4,11 +4,14 @@
 <div class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 navbar navbar-expand-md navbar-dark bg-dark fixed-top">
     <h5 class="my-0 mr-md-auto font-weight-normal navbar-brand clickable" onclick="navigate('welcome')">My App</h5>
     <ul class="navbar-nav my-2 my-md-0 mr-md-3">
+        <c:if test="${auth.role != 'UNKNOWN'}">
+            <t:nav-item url="files/list" label="label.files"/>
+        </c:if>
         <c:if test="${auth.role eq 'USER' or auth.role eq 'ADMIN'}">
-            <t:nav-item url="group/list" label="groups"/>
+            <t:nav-item url="group/list" label="label.groups"/>
         </c:if>
         <c:if test="${auth.role eq 'ADMIN'}">
-            <t:nav-item url="user/list" label="users"/>
+            <t:nav-item url="user/list" label="label.users"/>
         </c:if>
         <t:nav-language/>
     </ul>

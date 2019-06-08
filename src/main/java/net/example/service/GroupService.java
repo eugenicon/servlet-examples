@@ -22,15 +22,15 @@ public class GroupService {
         return groupDao.getById(id);
     }
 
-    public void add(Group group) {
-        groupDao.add(group);
-    }
-
     public void delete(Integer id) {
         groupDao.delete(id);
     }
 
-    public void update(Group group) {
-        groupDao.update(group);
+    public void save(Group group) {
+        if (group.getId() == 0) {
+            groupDao.add(group);
+        } else {
+            groupDao.update(group);
+        }
     }
 }

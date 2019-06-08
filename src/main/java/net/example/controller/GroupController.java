@@ -34,11 +34,7 @@ public class GroupController implements Controller {
 
     @PostMapping("/group/save")
     public View saveGroup(@Valid Group group) {
-        if (group.getId() == 0) {
-            groupService.add(group);
-        } else {
-            groupService.update(group);
-        }
+        groupService.save(group);
         return new RedirectView(new ModelAndView("group/list"));
     }
 

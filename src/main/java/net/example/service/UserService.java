@@ -20,14 +20,6 @@ public class UserService {
         return userDao.getAll();
     }
 
-    public void addUser(User user) throws ServiceException {
-        try {
-            userDao.add(user);
-        } catch (Exception e) {
-            throw new ServiceException("Could not save user", e);
-        }
-    }
-
     public List<User> getUsersInGroup(Group group) {
         return userDao.getUsersByGroup(group);
     }
@@ -44,7 +36,11 @@ public class UserService {
         userDao.delete(id);
     }
 
-    public void updateUser(User user) {
-        userDao.update(user);
+    public void save(User user) {
+        if (user.getId() == 0) {
+            userDao.add(user);
+        } else {
+            userDao.update(user);
+        }
     }
 }

@@ -8,7 +8,7 @@
 
 <li class="nav-item ${requestScope['javax.servlet.forward.servlet_path'].contains(url) ? 'active' : ''}">
     <a class="nav-link" href="${url}">
-        <fmt:message key="label.${label}"/>
+        <fmt:message key="${label}"/>
         <span class="sr-only">(current)</span>
     </a>
 </li>

@@ -31,12 +31,12 @@ public class RegistrationController implements Controller {
     }
 
     @PostMapping("/register")
-    public View register(@Valid UserRegistrationDto userLogin, HttpSession session) throws ServiceException {
+    public View register(@Valid UserRegistrationDto userLogin, HttpSession session) {
         User user = new User();
         user.setName(userLogin.getUserName());
         user.setPassword(userLogin.getPassword());
         user.setRole(Role.USER);
-        userService.addUser(user);
+        userService.save(user);
         return new RedirectView(new ModelAndView("login"));
     }
 
