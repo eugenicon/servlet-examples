@@ -20,4 +20,9 @@ public class ErrorController implements Controller {
     public ModelAndView getViewWithSomeTestException() {
         throw new RuntimeException("Exception thrown somewhere in code");
     }
+
+    @GetMapping("/status/forbidden")
+    public ModelAndView forbidden() {
+        return new ModelAndView("status/forbidden.jsp");
+    }
 }

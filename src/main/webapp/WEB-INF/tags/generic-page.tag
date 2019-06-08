@@ -5,6 +5,7 @@
 <%@tag description="Overall Page template" pageEncoding="UTF-8" %>
 <%@attribute name="title" %>
 <%@attribute name="showNavBar" type="java.lang.Boolean" %>
+<%@attribute name="showFooter" type="java.lang.Boolean" %>
 <%@attribute name="header" fragment="true" %>
 <%@attribute name="footer" fragment="true" %>
 <html>
@@ -34,14 +35,16 @@
         <jsp:doBody/>
     </main>
 </div>
-<div id="pagefooter">
-    <jsp:invoke fragment="footer"/>
+<c:if test="${showFooter != false}">
+    <div id="pagefooter">
+        <jsp:invoke fragment="footer"/>
 
-    <footer class="footer">
-        <div class="container">
-            <span class="text-muted">Copyright 2019, Bla-Bla-Bla Inc.</span>
-        </div>
-    </footer>
-</div>
+        <footer class="footer">
+            <div class="container">
+                <span class="text-muted">Copyright 2019, Bla-Bla-Bla Inc.</span>
+            </div>
+        </footer>
+    </div>
+</c:if>
 </body>
 </html>

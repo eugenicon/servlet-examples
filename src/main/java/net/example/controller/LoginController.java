@@ -30,7 +30,7 @@ public class LoginController implements Controller {
     @PostMapping("/login")
     public View login(@Valid UserLoginDto userLogin, HttpSession session) throws ServiceException {
         authenticationService.login(session, userLogin.getUserName(), userLogin.getPassword());
-        return new RedirectView(new ModelAndView("user/list"));
+        return new RedirectView(new ModelAndView("welcome"));
     }
 
     @GetMapping("/logout")
@@ -41,8 +41,8 @@ public class LoginController implements Controller {
 
     @ExceptionMapping(ServiceException.class)
     public View showUserAddErrors(ServiceException error, UserLoginDto userLogin) {
-        ModelAndView modelAndView = new ModelAndView("login.jsp");
+        ModelAndView modelAndView = new ModelAndView("login");
         modelAndView.addParameter("login", userLogin);
-        return modelAndView;
+        return new RedirectView(modelAndView);
     }
 }

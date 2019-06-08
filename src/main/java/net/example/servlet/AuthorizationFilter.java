@@ -31,7 +31,7 @@ public class AuthorizationFilter implements Filter {
 
         for (Role role : Role.values()) {
             String value = properties.getProperty("url.allowed." + role.name().toLowerCase());
-            String target = role == Role.UNKNOWN ? "/login" : "/welcome";
+            String target = role == Role.UNKNOWN ? "/login" : "/status/forbidden";
             List<String> allowedUrls = value != null ? Arrays.asList(value.split(",")) : Collections.singletonList(target);
             rolePageRestrictions.put(role, req -> ServletUtils.requestUrlMatches(req, allowedUrls) ? "" : target);
         }
