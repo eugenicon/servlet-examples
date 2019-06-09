@@ -92,8 +92,9 @@ public class RequestResolver {
         try {
             dispatch(getView(request, getControllers), request, response);
         } catch (Exception e) {
+            LOGGER.error(e);
             request.setAttribute("error", e.getCause());
-            request.getRequestDispatcher("/view/error").forward(request, response);
+            request.getRequestDispatcher("/view/status/error").forward(request, response);
         }
     }
 
@@ -106,7 +107,7 @@ public class RequestResolver {
             view.getParams().forEach(request::setAttribute);
             request.getRequestDispatcher("/" + pageUrl).forward(request, response);
         } else {
-            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+            request.getRequestDispatcher("/view/status/not-found").forward(request, response);
         }
     }
 
