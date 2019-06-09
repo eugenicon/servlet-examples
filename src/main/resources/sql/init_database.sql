@@ -21,3 +21,21 @@ create table if not exists files (
     data bytea,
     size bigint
 );
+
+create table if not exists apartments (
+    id SERIAL NOT NULL PRIMARY KEY,
+    name varchar (250) NOT NULL,
+    numberOfPlaces int NOT NULL,
+    description varchar (2000) NOT NULL,
+    address varchar (500) NOT NULL,
+    type varchar (50) NOT NULL,
+    owner int,
+    CONSTRAINT apartments_owner_fkey FOREIGN KEY (owner)
+     REFERENCES users (id)
+);
+
+create table if not exists linked_files (
+    id SERIAL NOT NULL PRIMARY KEY,
+    owner_id int constraint linked_files_apartments_id_fk references apartments,
+    file_id int constraint linked_files_files_id_fk references files
+);

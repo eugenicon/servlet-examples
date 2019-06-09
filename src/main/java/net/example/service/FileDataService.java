@@ -33,4 +33,14 @@ public class FileDataService {
             fileDataDao.update(fileData);
         }
     }
+
+    public List<FileData> getAllById(List<Integer> imageIds) {
+        return fileDataDao.getAllById(imageIds);
+    }
+
+    public void saveLinks(List<FileData> images, int ownerId) {
+        if (!images.isEmpty()) {
+            fileDataDao.saveLinks(images, ownerId);
+        }
+    }
 }

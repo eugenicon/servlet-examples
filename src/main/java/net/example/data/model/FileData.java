@@ -1,5 +1,7 @@
 package net.example.data.model;
 
+import java.util.Objects;
+
 public class FileData {
     private int id;
     private String name;
@@ -55,5 +57,19 @@ public class FileData {
         int exp = (int) (Math.log(size) / Math.log(unit));
         char pre = ("kMGTPE").charAt(exp - 1);
         return String.format("%.1f %sB", size / Math.pow(unit, exp), pre);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        FileData fileData = (FileData) o;
+        return id == fileData.id;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = Objects.hash(id, name, encoded, size);
+        return 31 * result;
     }
 }

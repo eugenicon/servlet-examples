@@ -26,7 +26,7 @@ function post(path, params) {
     form.submit();
 }
 
-function bs_input_file() {
+function prepareFileInputs() {
     $(".input-file").before(
         function() {
             if ( ! $(this).prev().hasClass('input-ghost') ) {
@@ -53,5 +53,10 @@ function bs_input_file() {
     );
 }
 $(function() {
-    bs_input_file();
+    prepareFileInputs();
 });
+
+function cloneElement(source, target) {
+    let clone = $(source + ':first').clone();
+    $(target).append(clone);
+}

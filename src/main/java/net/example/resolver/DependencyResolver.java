@@ -51,6 +51,10 @@ public class DependencyResolver {
                 Class actualParameterType = getGenericTypes(parameters[i].getParameterizedType()).get(0);
                 List<Class> classList = declaredComponentClasses.stream().filter(actualParameterType::isAssignableFrom).collect(Collectors.toList());
                 args[i] = classList.stream().map(c -> resolveComponentInstance(declaredComponentClasses, c)).collect(Collectors.toList());
+            } else if (parameterType.equals(Lazy.class)) {
+                Class actualParameterType = getGenericTypes(parameters[i].getParameterizedType()).get(0);
+                componentInstances.put(parameterType, Lazy.of(() -> resolveComponentInstance(declaredComponentClasses, actualParameterType)));
+                args[i] = componentInstances.get(parameterType);
             } else if (componentInstances.containsKey(parameterType) || declaredComponentClasses.contains(parameterType)) {
                 args[i] = resolveComponentInstance(declaredComponentClasses, parameterType);
             }

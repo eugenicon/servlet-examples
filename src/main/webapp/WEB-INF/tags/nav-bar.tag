@@ -4,27 +4,28 @@
 <div class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 navbar navbar-expand-md navbar-dark bg-dark fixed-top">
     <h5 class="my-0 mr-md-auto font-weight-normal navbar-brand clickable" onclick="navigate('welcome')">My App</h5>
     <ul class="navbar-nav my-2 my-md-0 mr-md-3">
-        <c:if test="${auth.role != 'UNKNOWN'}">
+        <t:if-role is="OWNER,ADMIN">
+            <t:nav-item url="apartments/list" label="label.apartments"/>
+        </t:if-role>
+        <t:if-role isNot="UNKNOWN">
             <t:nav-item url="files/list" label="label.files"/>
-        </c:if>
-        <c:if test="${auth.role eq 'USER' or auth.role eq 'ADMIN'}">
+        </t:if-role>
+        <t:if-role is="USER,ADMIN">
             <t:nav-item url="group/list" label="label.groups"/>
-        </c:if>
-        <c:if test="${auth.role eq 'ADMIN'}">
+        </t:if-role>
+        <t:if-role is="ADMIN">
             <t:nav-item url="user/list" label="label.users"/>
-        </c:if>
+        </t:if-role>
         <t:nav-language/>
     </ul>
 
     <div class="btn-group" >
-        <c:if test="${auth.role eq 'UNKNOWN'}">
+        <t:if-role is="UNKNOWN">
             <a class="btn btn-outline-secondary" href="register">Sign up</a>
-        </c:if>
-        <c:if test="${auth.role eq 'UNKNOWN'}">
             <a class="btn btn-outline-primary" href="login">Sign in</a>
-        </c:if>
-        <c:if test="${auth.role != 'UNKNOWN'}">
+        </t:if-role>
+        <t:if-role isNot="UNKNOWN">
             <a class="btn btn-outline-primary" href="logout">Sign out</a>
-        </c:if>
+        </t:if-role>
     </div>
 </div>

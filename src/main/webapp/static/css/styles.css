@@ -57,3 +57,34 @@ tr:hover .table-options {
 .table-options i {
     cursor: pointer;
 }
+
+.apartment-card {
+    width: 18rem;
+    margin: 0.5rem;
+}
+
+#image-gallery .modal-footer{
+    display: block;
+}
+
+.thumb{
+    margin-top: 15px;
+    margin-bottom: 15px;
+    position: relative;
+    display: inline-block;
+}
+
+.options {
+    position: absolute;
+    bottom: 4px;
+    right: 23px;
+    text-shadow: 0 0 4px #FFFFFF;
+}
+
+.hyperlink {
+    color: #007bff !important;
+}
+
+.hyperlink:hover {
+    color: #0056b3 !important;
+}

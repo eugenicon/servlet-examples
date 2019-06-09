@@ -43,4 +43,8 @@ public class UserService {
             userDao.update(user);
         }
     }
+
+    public Optional<User> findByName(String name) {
+        return userDao.findByName(name);
+    }
 }
