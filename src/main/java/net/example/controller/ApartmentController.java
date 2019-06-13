@@ -61,4 +61,11 @@ public class ApartmentController implements Controller {
         modelAndView.addParameter("data", apartmentService.getById(id));
         return modelAndView;
     }
+
+    @GetMapping("/apartments/view/{id}")
+    public View view(Integer id) {
+        ModelAndView view = new ModelAndView("apartment/apartment-view.jsp");
+        view.addParameter("data", apartmentService.getById(id));
+        return view;
+    }
 }

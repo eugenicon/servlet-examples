@@ -53,6 +53,10 @@
                                 </select>
                             </div>
                             <div class="form-group">
+                                <label for="numberOfPlaces"><fmt:message key="label.apartment.number-of-places"/>:</label>
+                                <input type="number" class="form-control" id="numberOfPlaces" name="numberOfPlaces" value="${data.getNumberOfPlaces()}">
+                            </div>
+                            <div class="form-group">
                                 <label for="address"><fmt:message key="label.address"/>:</label>
                                 <textarea class="form-control" rows="1" id="address" name="address">${data.getAddress()}</textarea>
                             </div>

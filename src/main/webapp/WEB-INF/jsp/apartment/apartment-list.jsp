@@ -26,7 +26,7 @@
                         </div>
                         <div class="card-footer">
                             <a href="apartments/edit/${item.getId()}" class="card-link">Edit</a>
-                            <a href="#" class="card-link">View</a>
+                            <a href="apartments/view/${item.getId()}" class="card-link">View</a>
                             <t:confirm-button styleClass="card-link" onConfirm="post('apartments/delete/${item.getId()}')">
                                 <a class="hyperlink">Delete</a>
                             </t:confirm-button>

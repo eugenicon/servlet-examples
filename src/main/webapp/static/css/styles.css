@@ -88,3 +88,11 @@ tr:hover .table-options {
 .hyperlink:hover {
     color: #0056b3 !important;
 }
+
+.text {
+    white-space: pre-line;
+}
+
+.table-borderless td {
+    padding-right: 0.75rem;
+}
