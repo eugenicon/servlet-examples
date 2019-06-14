@@ -8,6 +8,7 @@
 <%@attribute name="showFooter" type="java.lang.Boolean" %>
 <%@attribute name="header" fragment="true" %>
 <%@attribute name="footer" fragment="true" %>
+<%@attribute name="dataTables" %>
 
 <!DOCTYPE html>
 <html>
@@ -23,6 +24,21 @@
     <script src="static/lib/bootstrap/4.3.1/js/bootstrap.min.js"></script>
     <link rel="stylesheet" href="static/lib/bootstrap/4.3.1/css/bootstrap.min.css">
     <link rel="stylesheet" href="static/lib/font-awesome/5.9.0/css/all.css">
+
+    <c:if test="${dataTables != null && dataTables != ''}">
+        <link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css">
+        <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+        <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
+
+        <script>
+            const tables = '${dataTables}'.split(',');
+            $(document).ready(function() {
+                tables.forEach(function (t) {
+                    $('#' + t).DataTable()
+                });
+            } );
+        </script>
+    </c:if>
 
     <link rel="stylesheet" href="static/css/styles.css">
     <script src="static/js/scripts.js"></script>

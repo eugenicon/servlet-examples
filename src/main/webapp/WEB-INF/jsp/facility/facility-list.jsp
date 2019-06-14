@@ -5,7 +5,7 @@
 <fmt:setLocale value="${sessionScope.lang}" />
 <fmt:setBundle basename="messages" />
 
-<t:generic-page title="Facilities">
+<t:generic-page title="Facilities" dataTables="facilities">
     <jsp:attribute name="header">
       <h1><fmt:message key="label.facilities"/></h1>
     </jsp:attribute>
@@ -13,7 +13,7 @@
     <jsp:body>
         <div class="row">
             <div class="col-sm-12">
-                <table class="table table-bordered">
+                <table id="facilities" class="table table-bordered">
                     <thead>
                     <tr>
                         <th>Id</th>
