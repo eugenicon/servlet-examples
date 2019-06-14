@@ -12,6 +12,8 @@ public class Apartment {
     private String address;
     private User owner;
     private List<FileData> images = new ArrayList<>();
+    private List<Facility> facilities = new ArrayList<>();
+    private double price;
 
     public int getId() {
         return id;
@@ -75,5 +77,21 @@ public class Apartment {
 
     public void setImages(List<FileData> images) {
         this.images = images;
+    }
+
+    public double getPrice() {
+        return price;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
+    }
+
+    public List<Facility> getFacilities() {
+        return facilities;
+    }
+
+    public void setFacilities(List<Facility> facilities) {
+        this.facilities = facilities;
     }
 }

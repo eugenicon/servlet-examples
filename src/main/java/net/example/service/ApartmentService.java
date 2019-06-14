@@ -10,10 +10,12 @@ import java.util.List;
 public class ApartmentService {
     private final ApartmentDao apartmentDao;
     private final FileDataService fileDataService;
+    private final FacilityService facilityService;
 
-    public ApartmentService(ApartmentDao apartmentDao, FileDataService fileDataService) {
+    public ApartmentService(ApartmentDao apartmentDao, FileDataService fileDataService, FacilityService facilityService) {
         this.apartmentDao = apartmentDao;
         this.fileDataService = fileDataService;
+        this.facilityService = facilityService;
     }
 
     public List<Apartment> getAll() {
@@ -35,5 +37,6 @@ public class ApartmentService {
             apartmentDao.update(entity);
         }
         fileDataService.saveLinks(entity.getImages(), entity.getId());
+        facilityService.saveForApartment(entity.getFacilities(), entity);
     }
 }

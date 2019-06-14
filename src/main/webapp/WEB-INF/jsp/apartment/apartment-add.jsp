@@ -24,6 +24,7 @@
                             <a class="nav-item nav-link active" id="nav-tab-1" data-toggle="tab" href="#nav-content-1" role="tab" aria-controls="nav-home" aria-selected="true">Profile</a>
                             <a class="nav-item nav-link" id="nav-tab-2" data-toggle="tab" href="#nav-content-2" role="tab" aria-controls="nav-profile" aria-selected="false">Description</a>
                             <a class="nav-item nav-link" id="nav-tab-3" data-toggle="tab" href="#nav-content-3" role="tab" aria-controls="nav-contact" aria-selected="false">Images</a>
+                            <a class="nav-item nav-link" id="nav-tab-4" data-toggle="tab" href="#nav-content-4" role="tab" aria-controls="nav-contact" aria-selected="false">Facilities</a>
                         </div>
                     </nav>
                     <div class="tab-content py-3 px-3 px-sm-0" id="nav-tabContent">
@@ -110,6 +111,16 @@
                                 </div>
                             </div>
 
+
+                        </div>
+                        <div class="tab-pane fade" id="nav-content-4" role="tabpanel" aria-labelledby="nav-tab-4">
+
+                            <c:forEach var="facility" items="${facilities}">
+                                <div class="form-check">
+                                    <input type="checkbox" class="form-check-input" id="facility-check-${facility.getId()}" name="facilities[]" value="${facility.getId()}" ${data.getFacilities().contains(facility) ? 'checked': ''}>
+                                    <label class="form-check-label" for="facility-check-${facility.getId()}">${facility.getName()}</label>
+                                </div>
+                            </c:forEach>
 
                         </div>
                     </div>

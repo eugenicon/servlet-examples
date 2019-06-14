@@ -5,10 +5,7 @@ import net.example.data.model.ApartmentType;
 import net.example.resolver.Component;
 import net.example.resolver.GetMapping;
 import net.example.resolver.PostMapping;
-import net.example.service.ApartmentService;
-import net.example.service.AuthenticatedUser;
-import net.example.service.FileDataService;
-import net.example.service.UserService;
+import net.example.service.*;
 import net.example.view.ModelAndView;
 import net.example.view.RedirectView;
 import net.example.view.View;
@@ -18,11 +15,13 @@ public class ApartmentController implements Controller {
     private final ApartmentService apartmentService;
     private final UserService userService;
     private final FileDataService fileDataService;
+    private final FacilityService facilityService;
 
-    public ApartmentController(ApartmentService apartmentService, UserService userService, FileDataService fileDataService) {
+    public ApartmentController(ApartmentService apartmentService, UserService userService, FileDataService fileDataService, FacilityService facilityService) {
         this.apartmentService = apartmentService;
         this.userService = userService;
         this.fileDataService = fileDataService;
+        this.facilityService = facilityService;
     }
 
     @GetMapping("/apartments/list")
@@ -37,6 +36,7 @@ public class ApartmentController implements Controller {
         ModelAndView view = new ModelAndView("apartment/apartment-add.jsp");
         view.addParameter("types", ApartmentType.values());
         view.addParameter("images", fileDataService.getAll());
+        view.addParameter("facilities", facilityService.getAll());
         return view;
     }
 
@@ -67,5 +67,10 @@ public class ApartmentController implements Controller {
         ModelAndView view = new ModelAndView("apartment/apartment-view.jsp");
         view.addParameter("data", apartmentService.getById(id));
         return view;
+    }
+
+    @GetMapping("/apartments/find")
+    public View find(Double priceMin, Double priceMax, Integer numberOfPlaces, ApartmentType type) {
+        return listPage();
     }
 }

@@ -7,6 +7,9 @@
         <t:if-role is="OWNER,ADMIN">
             <t:nav-item url="apartments/list" label="label.apartments"/>
         </t:if-role>
+        <t:if-role is="ADMIN">
+            <t:nav-item url="facility/list" label="label.facilities"/>
+        </t:if-role>
         <t:if-role isNot="UNKNOWN">
             <t:nav-item url="files/list" label="label.files"/>
         </t:if-role>

@@ -39,3 +39,14 @@ create table if not exists linked_files (
     owner_id int constraint linked_files_apartments_id_fk references apartments,
     file_id int constraint linked_files_files_id_fk references files
 );
+
+create table if not exists facilities (
+    id SERIAL NOT NULL PRIMARY KEY,
+    name varchar(250) NOT NULL
+);
+
+create table if not exists apartment_facilities (
+    id SERIAL NOT NULL PRIMARY KEY,
+    apartment_id int constraint apartment_facilities_apartments_id_fk references apartments,
+    facility_id int constraint apartment_facilities_facilities_id_fk references facilities
+);

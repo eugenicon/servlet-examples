@@ -14,11 +14,13 @@ public class ApartmentDao {
     private final DataSource dataSource;
     private final UserDao userDao;
     private final FileDataDao fileDataDao;
+    private final FacilityDao facilityDao;
 
-    public ApartmentDao(DataSource dataSource, UserDao userDao, FileDataDao fileDataDao) {
+    public ApartmentDao(DataSource dataSource, UserDao userDao, FileDataDao fileDataDao, FacilityDao facilityDao) {
         this.dataSource = dataSource;
         this.userDao = userDao;
         this.fileDataDao = fileDataDao;
+        this.facilityDao = facilityDao;
     }
 
     private Apartment convert(ResultSet rs) throws SQLException {
@@ -31,6 +33,7 @@ public class ApartmentDao {
         entity.setType(ApartmentType.valueOf(rs.getString("type")));
         entity.setOwner(userDao.getById(rs.getInt("owner")).orElse(null));
         entity.setImages(fileDataDao.getAllByOwner(entity.getId()));
+        entity.setFacilities(facilityDao.getAllByApartment(entity.getId()));
         return entity;
     }
 

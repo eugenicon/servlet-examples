@@ -2,6 +2,7 @@
 <%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@taglib prefix="cfn" uri="/WEB-INF/tld/customTagLibrary" %>
+<%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <fmt:setLocale value="${sessionScope.lang}"/>
 <fmt:setBundle basename="messages"/>
 
@@ -58,6 +59,14 @@
                         <tr>
                             <td class="font-weight-bold">Places:</td>
                             <td>${data.getNumberOfPlaces()}</td>
+                        </tr>
+                        <tr>
+                            <td class="font-weight-bold">Facilities:</td>
+                            <td>
+                                <c:forEach var="facility" items="${data.getFacilities()}">
+                                    <div>${facility.getName()}</div>
+                                </c:forEach>
+                            </td>
                         </tr>
                     </table>
                 </div>
