@@ -34,7 +34,7 @@ public class UserController implements Controller {
         return view;
     }
 
-    @GetMapping("/user/list")
+    @GetMapping("/users")
     public View getUserListBootstrap() {
         ModelAndView view = getUserList();
         view.setPageUrl("user/user-list.jsp");
@@ -46,14 +46,14 @@ public class UserController implements Controller {
         return new ModelAndView("add-user.jsp");
     }
 
-    @GetMapping("/user/add")
+    @GetMapping("/users/add")
     public View showAddUserPageBootstrap() {
         ModelAndView modelAndView = new ModelAndView("user/add-user.jsp");
         modelAndView.addParameter("groups", groupService.getAllGroups());
         return modelAndView;
     }
 
-    @GetMapping("/user/edit/{id}")
+    @GetMapping("/users/{id}")
     public View showEditUserPage(Integer id) throws ServiceException  {
         View modelAndView = showAddUserPageBootstrap();
         modelAndView.addParameter("user", userService.getById(id));

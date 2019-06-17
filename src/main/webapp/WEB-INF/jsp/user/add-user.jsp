@@ -7,7 +7,8 @@
 
 <t:generic-page title="Add User">
     <jsp:attribute name="header">
-      <h1><fmt:message key="label.add-user"/></h1>
+        <h1><fmt:message key="label.add-user"/></h1>
+        <t:breadcrumb/>
     </jsp:attribute>
 
     <jsp:body>

@@ -17,7 +17,7 @@
             <t:nav-item url="group/list" label="label.groups"/>
         </t:if-role>
         <t:if-role is="ADMIN">
-            <t:nav-item url="user/list" label="label.users"/>
+            <t:nav-item url="users" label="label.users"/>
         </t:if-role>
         <t:nav-language/>
     </ul>

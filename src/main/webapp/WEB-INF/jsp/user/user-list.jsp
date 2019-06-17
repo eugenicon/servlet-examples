@@ -7,7 +7,8 @@
 
 <t:generic-page title="Users">
     <jsp:attribute name="header">
-      <h1><fmt:message key="label.users"/></h1>
+        <h1><fmt:message key="label.users"/></h1>
+        <t:breadcrumb/>
     </jsp:attribute>
 
     <jsp:body>
@@ -32,7 +33,7 @@
                             <td>${item.getGroup().getName()}</td>
                             <td class="tr-table-options">
                                 <div class="table-options">
-                                    <i class="fas fa-pen" onclick="navigate('user/edit/${item.getId()}')"></i>
+                                    <i class="fas fa-pen" onclick="navigate('users/${item.getId()}')"></i>
                                     <t:confirm-button onConfirm="post('user/delete/${item.getId()}')">
                                         <i class="fas fa-times"></i>
                                     </t:confirm-button>
@@ -42,7 +43,7 @@
                     </c:forEach>
                 </table>
 
-                <a href="user/add" class="btn btn-primary floating-button"><fmt:message key="label.add"/></a>
+                <a href="users/add" class="btn btn-primary floating-button"><fmt:message key="label.add"/></a>
             </div>
         </div>
 

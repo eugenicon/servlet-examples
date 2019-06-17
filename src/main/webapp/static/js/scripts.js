@@ -2,7 +2,7 @@ let htmlBaseElement = document.querySelector('base');
 
 const base = (htmlBaseElement || {}).href;
 
-document.onloadend(function () {
+/*document.onloadend(function () {
     const es = document.getElementsByTagName('a');
     for (let i = 0; i < es.length; i++) {
         let href = es[i].getAttribute('href');
@@ -10,7 +10,7 @@ document.onloadend(function () {
             es[i].onclick(e => e.preventDefault());
         }
     }
-});
+});*/
 
 function navigate(url) {
     window.location.href=url;
